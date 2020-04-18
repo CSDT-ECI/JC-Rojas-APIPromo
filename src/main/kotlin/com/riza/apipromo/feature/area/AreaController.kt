@@ -2,10 +2,11 @@ package com.riza.apipromo.feature.area
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.riza.apipromo.base.BaseResponse
 import com.riza.apipromo.core.Point
 import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.core.Polygon
-import com.riza.apipromo.base.BaseResponse
+import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -19,6 +20,8 @@ class AreaController @Autowired constructor(
         private val areaRepository: AreaRepository
 ) {
 
+    private val logger = LoggerFactory.logger(AreaController::class.java)
+
     @GetMapping("test")
     @ResponseBody
     fun test(): BaseResponse<String> {
@@ -30,7 +33,7 @@ class AreaController @Autowired constructor(
 
     @PostMapping("add")
     @ResponseBody
-    fun add(@RequestBody body: AreaRequest): BaseResponse<AreaDTO>{
+    fun add(@RequestBody body: AreaRequest): BaseResponse<AreaDTO> {
 
         val points = objectMapper.writeValueAsString(body.points)
         val area = AreaDTO(
@@ -50,7 +53,7 @@ class AreaController @Autowired constructor(
 
     @GetMapping("all")
     @ResponseBody
-    fun all(): BaseResponse<Iterable<AreaDTO>>{
+    fun all(): BaseResponse<Iterable<AreaDTO>> {
 
         return BaseResponse(
                 message = "semua area",
@@ -61,7 +64,7 @@ class AreaController @Autowired constructor(
 
     @PostMapping("delete")
     @ResponseBody
-    fun delete(@RequestBody body: IdOnlyRequest): BaseResponse<AreaDTO>{
+    fun delete(@RequestBody body: IdOnlyRequest): BaseResponse<AreaDTO> {
 
         areaRepository.deleteById(body.id)
 
@@ -76,40 +79,38 @@ class AreaController @Autowired constructor(
     fun check(
             @RequestBody body: CheckPointRequest,
             @PathVariable("method") method: String
-    ): BaseResponse<Boolean>{
+    ): BaseResponse<Boolean> {
+
+        val result = BaseResponse<Boolean>()
 
         val area = areaRepository.findById(body.areaId)
+        logger.info("req $body -> $area")
         var isInside = false
-        area.ifPresent {
+        area.ifPresentOrElse({
             val polygon = area2Polygon(it)
-            isInside = if(method == "wn"){
+            isInside = if (method == "wn") {
                 pointInclusion.analyzePointByCN(polygon, body.point)
-            }else{
+            } else {
                 pointInclusion.analyzePointByWN(polygon, body.point)
             }
-        }
+            result.data = true
+            result.message = if (isInside) "Point di dalam" else "Point di luar"
+        }, {
+            result.data = false
+            result.message = "Area Tidak ditemukan"
+        })
 
-        return BaseResponse(
-                message = "Berhasil",
-                success = true,
-                data = isInside
-
-        )
+        return result
 
     }
 
-    private fun area2Polygon(areaDTO: AreaDTO): Polygon{
+    private fun area2Polygon(areaDTO: AreaDTO): Polygon {
         val points = objectMapper.readValue<List<Point>>(areaDTO.points)
         return Polygon(
                 areaDTO.name,
                 ArrayList(points)
         )
     }
-
-
-
-
-
 
 
 }

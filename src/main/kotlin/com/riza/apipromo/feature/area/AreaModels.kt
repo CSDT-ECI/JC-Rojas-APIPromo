@@ -23,12 +23,12 @@ data class AreaDTO(
 )
 
 data class IdOnlyRequest(
-        val id: Long
+        val id: Long = 0L
 )
 
 data class CheckPointRequest(
-        val point: Point,
-        val areaId: Long
+        val point: Point = Point(),
+        val areaId: Long = 0L
 )
 
 data class AreaRequest(
