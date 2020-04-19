@@ -31,6 +31,11 @@ data class CheckPointRequest(
         val areaId: Long = 0L
 )
 
+data class CheckManyPointRequest(
+        val points:  List<Point> = emptyList(),
+        val areaId: Long = 0L
+)
+
 data class AreaRequest(
         val name: String = "",
         val points: List<Point> = emptyList()
