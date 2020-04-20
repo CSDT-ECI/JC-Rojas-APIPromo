@@ -7,13 +7,13 @@ import com.riza.apipromo.core.Point
 import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.core.Polygon
 import com.riza.apipromo.error.BadRequestException
+import com.riza.apipromo.feature.area.models.*
 import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 
-@Controller
+@RestController
 @RequestMapping(path = ["area"])
 class AreaController @Autowired constructor(
         private val pointInclusion: PointInclusion,
@@ -38,9 +38,9 @@ class AreaController @Autowired constructor(
 
         val points = objectMapper.writeValueAsString(body.points)
         val area = AreaDTO(
-                0,
                 body.name,
-                points
+                points,
+                emptySet()
         )
 
         val saved = areaRepository.save(area)
