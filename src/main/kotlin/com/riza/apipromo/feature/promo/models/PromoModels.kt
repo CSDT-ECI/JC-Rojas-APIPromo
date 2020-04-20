@@ -12,5 +12,6 @@ data class AddPromoRequest(
         val type: PromoType = PromoType.PRICE,
         val value: Int = 0,
         val service: String = "",
+        val description: String = "",
         val areaIds: List<Long> = emptyList()
 )

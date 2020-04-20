@@ -37,6 +37,7 @@ class PromoController @Autowired constructor(
                 promoRequest.type,
                 promoRequest.value,
                 promoRequest.service,
+                promoRequest.description,
                 areas.toHashSet()
         )
 

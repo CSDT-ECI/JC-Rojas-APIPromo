@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity(name = "area")
 public class AreaDTO {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String points;

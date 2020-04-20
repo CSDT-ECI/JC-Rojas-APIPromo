@@ -9,10 +9,8 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity(name = "promo")
-//@Data
-//@EqualsAndHashCode(exclude = "areas")
 public class PromoDTO {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String code;
@@ -30,6 +28,8 @@ public class PromoDTO {
 
     private String service;
 
+    private String description;
+
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
@@ -42,13 +42,14 @@ public class PromoDTO {
     @JsonIgnoreProperties("promos")
     private Set<AreaDTO> areas;
 
-    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, Set<AreaDTO> areas) {
+    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas) {
         this.code = code;
         this.startDate = startDate;
         this.endDate = endDate;
         this.type = type;
         this.value = value;
         this.service = service;
+        this.description = description;
         this.areas = areas;
     }
 
