@@ -10,13 +10,26 @@ public class UserDTO {
     private Long id;
 
     private String name;
+    private String fcmId;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserLocationDTO locations;
 
     public UserDTO(String name) {
         this.name = name;
+        this.fcmId = "";
         this.locations = new UserLocationDTO();
+    }
+
+    public UserDTO() {
+    }
+
+    public String getFcmId() {
+        return fcmId;
+    }
+
+    public void setFcmId(String fcmId) {
+        this.fcmId = fcmId;
     }
 
     public Long getId() {

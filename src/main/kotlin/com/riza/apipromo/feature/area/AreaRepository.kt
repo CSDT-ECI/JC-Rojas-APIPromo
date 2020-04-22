@@ -5,8 +5,5 @@ import org.springframework.data.repository.CrudRepository
 
 interface AreaRepository : CrudRepository<AreaDTO, Long> {
 
-    override fun findAll(): MutableIterable<AreaDTO>
-
-
 
 }
