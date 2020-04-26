@@ -3,6 +3,7 @@ package com.riza.apipromo.feature.promo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.riza.apipromo.feature.area.models.AreaDTO;
+import com.riza.apipromo.feature.user.models.UserDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,7 +43,19 @@ public class PromoDTO {
     @JsonIgnoreProperties("promos")
     private Set<AreaDTO> areas;
 
-    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas) {
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
+    @JoinTable(
+            name = "promo_user",
+            joinColumns = @JoinColumn(name = "promo_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnoreProperties({"name", "locations", "fcmId", "promos"})
+    private Set<UserDTO> users;
+
+    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas, Set<UserDTO> users) {
         this.code = code;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -51,6 +64,7 @@ public class PromoDTO {
         this.service = service;
         this.description = description;
         this.areas = areas;
+        this.users = users;
     }
 
     public PromoDTO() {
@@ -62,6 +76,22 @@ public class PromoDTO {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<UserDTO> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
     }
 
     public Long getId() {

@@ -1,6 +1,10 @@
 package com.riza.apipromo.feature.user.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.riza.apipromo.feature.promo.models.PromoDTO;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "user")
 public class UserDTO {
@@ -16,6 +20,11 @@ public class UserDTO {
     @Embedded
     private UserLocation locations;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
+    @JsonIgnore
+    private Set<PromoDTO> promos;
+
+
     public UserDTO(String name) {
         this.name = name;
         this.fcmId = "";
@@ -23,6 +32,14 @@ public class UserDTO {
     }
 
     public UserDTO() {
+    }
+
+    public Set<PromoDTO> getPromos() {
+        return promos;
+    }
+
+    public void setPromos(Set<PromoDTO> promos) {
+        this.promos = promos;
     }
 
     public String getFcmId() {

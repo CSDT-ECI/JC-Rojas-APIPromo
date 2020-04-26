@@ -1,13 +1,11 @@
 package com.riza.apipromo.feature.area
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.riza.apipromo.base.BaseResponse
-import com.riza.apipromo.core.Point
 import com.riza.apipromo.core.PointInclusion
-import com.riza.apipromo.core.Polygon
 import com.riza.apipromo.error.BadRequestException
 import com.riza.apipromo.feature.area.models.*
+import com.riza.apipromo.utils.Utils
 import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -88,7 +86,7 @@ class AreaController @Autowired constructor(
         logger.info("req $body -> $area")
         var isInside = false
         area.ifPresentOrElse({
-            val polygon = area2Polygon(it)
+            val polygon = Utils.area2Polygon(it, objectMapper)
             isInside = if (method == "wn") {
                 pointInclusion.analyzePointByCN(polygon, body.point)
             } else {
@@ -117,7 +115,7 @@ class AreaController @Autowired constructor(
         logger.info("req $body -> $area")
         area.ifPresentOrElse({
 
-            val polygon = area2Polygon(it)
+            val polygon = Utils.area2Polygon(it, objectMapper)
 
             body.points.forEach {
                 val inside = if (method == "wn") {
@@ -135,14 +133,6 @@ class AreaController @Autowired constructor(
         })
 
         return response
-    }
-
-    private fun area2Polygon(areaDTO: AreaDTO): Polygon {
-        val points = objectMapper.readValue<List<Point>>(areaDTO.points)
-        return Polygon(
-                areaDTO.name,
-                ArrayList(points)
-        )
     }
 
 
