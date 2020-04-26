@@ -1,35 +1,27 @@
 package com.riza.apipromo.feature.user.models;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Embeddable;
 
-import javax.persistence.Entity;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+@Embeddable
+public class UserLocation {
 
-@Entity(name = "user_location")
-public class UserLocationDTO {
+    private String monday;
+    private String tuesday;
+    private String wednesday;
+    private String thursday;
+    private String friday;
+    private String saturday;
+    private String sunday;
 
-    @Id
-    private Long id;
 
-    private String monday = "[]";
-    private String tuesday= "[]";
-    private String wednesday= "[]";
-    private String thursday= "[]";
-    private String friday= "[]";
-    private String saturday= "[]";
-    private String sunday= "[]";
-
-    @OneToOne
-    @MapsId
-    private UserDTO user;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public UserLocation() {
+        monday = "[]";
+        tuesday = "[]";
+        wednesday = "[]";
+        thursday = "[]";
+        friday = "[]";
+        saturday = "[]";
+        sunday = "[]";
     }
 
     public String getMonday() {

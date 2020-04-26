@@ -2,7 +2,6 @@ package com.riza.apipromo
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.riza.apipromo.core.PointInclusion
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.boot.runApplication

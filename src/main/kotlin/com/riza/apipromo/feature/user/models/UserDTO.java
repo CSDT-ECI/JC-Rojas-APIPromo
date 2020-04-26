@@ -7,18 +7,19 @@ public class UserDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     private String name;
     private String fcmId;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserLocationDTO locations;
+    @Embedded
+    private UserLocation locations;
 
     public UserDTO(String name) {
         this.name = name;
         this.fcmId = "";
-        this.locations = new UserLocationDTO();
+        this.locations = new UserLocation();
     }
 
     public UserDTO() {
@@ -48,11 +49,11 @@ public class UserDTO {
         this.name = name;
     }
 
-    public UserLocationDTO getLocations() {
+    public UserLocation getLocations() {
         return locations;
     }
 
-    public void setLocations(UserLocationDTO locations) {
+    public void setLocations(UserLocation locations) {
         this.locations = locations;
     }
 }

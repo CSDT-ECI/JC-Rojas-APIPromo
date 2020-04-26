@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping(path = ["user","users"])
 class UserController @Autowired constructor(
         val objectMapper: ObjectMapper,
         val pointInclusion: PointInclusion,
