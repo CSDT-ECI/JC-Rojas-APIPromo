@@ -12,6 +12,8 @@ public class AreaDTO {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
+    @Column(columnDefinition = "text")
     private String points;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "areas")

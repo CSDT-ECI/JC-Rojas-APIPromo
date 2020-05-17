@@ -7,8 +7,8 @@ enum class PromoType{
 
 data class AddPromoRequest(
         val code: String = "",
-        val startDate: String = "",
-        val endDate: String = "",
+        val startDate: Long = 0L,
+        val endDate: Long = 0L,
         val type: PromoType = PromoType.PRICE,
         val value: Int = 0,
         val service: String = "",
