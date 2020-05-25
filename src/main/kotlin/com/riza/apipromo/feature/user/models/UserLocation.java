@@ -1,16 +1,24 @@
 package com.riza.apipromo.feature.user.models;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class UserLocation {
 
+    @Column(columnDefinition = "text")
     private String monday;
+    @Column(columnDefinition = "text")
     private String tuesday;
+    @Column(columnDefinition = "text")
     private String wednesday;
+    @Column(columnDefinition = "text")
     private String thursday;
+    @Column(columnDefinition = "text")
     private String friday;
+    @Column(columnDefinition = "text")
     private String saturday;
+    @Column(columnDefinition = "text")
     private String sunday;
 
 

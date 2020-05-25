@@ -16,3 +16,9 @@ data class UpdateLocationRequest(
         val day: String = "",
         val location: List<Point>  = emptyList()
 )
+
+data class UserBulkRequest(
+        val users: List<AddUserRequest> = emptyList(),
+        val centroid: Point = Point(),
+        val radius: Double = 0.0
+)

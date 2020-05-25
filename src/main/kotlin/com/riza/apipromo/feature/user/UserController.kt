@@ -2,18 +2,17 @@ package com.riza.apipromo.feature.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.riza.apipromo.base.BaseResponse
+import com.riza.apipromo.core.Point
 import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.error.BadRequestException
 import com.riza.apipromo.feature.promo.PromoRepository
-import com.riza.apipromo.feature.user.models.AddUserRequest
-import com.riza.apipromo.feature.user.models.EditFCMRequest
-import com.riza.apipromo.feature.user.models.UpdateLocationRequest
-import com.riza.apipromo.feature.user.models.UserDTO
+import com.riza.apipromo.feature.user.models.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import riza.com.cto.core.PolygonUtils
 
 @RestController
-@RequestMapping(path = ["user","users"])
+@RequestMapping(path = ["user", "users"])
 class UserController @Autowired constructor(
         val objectMapper: ObjectMapper,
         val pointInclusion: PointInclusion,
@@ -23,7 +22,7 @@ class UserController @Autowired constructor(
 
     @PostMapping("add")
     @ResponseBody
-    fun addUser(@RequestBody request: AddUserRequest): BaseResponse<UserDTO>{
+    fun addUser(@RequestBody request: AddUserRequest): BaseResponse<UserDTO> {
 
         val user = userRepository.save(
                 UserDTO(request.name)
@@ -37,7 +36,7 @@ class UserController @Autowired constructor(
 
     @GetMapping("all")
     @ResponseBody
-    fun allUser(): BaseResponse<Iterable<UserDTO>>{
+    fun allUser(): BaseResponse<Iterable<UserDTO>> {
 
         val users = userRepository.findAll()
 
@@ -49,7 +48,7 @@ class UserController @Autowired constructor(
 
     @PostMapping("edit-fcm")
     @ResponseBody
-    fun editFCM(@RequestBody request: EditFCMRequest): BaseResponse<UserDTO>{
+    fun editFCM(@RequestBody request: EditFCMRequest): BaseResponse<UserDTO> {
 
         val user = userRepository.findById(request.idUser)
 
@@ -58,7 +57,7 @@ class UserController @Autowired constructor(
             it.fcmId = request.fcm
             userRepository.save(it)
             response.data = it
-        },{
+        }, {
             throw BadRequestException("User tidak ditemukan")
         })
         return response
@@ -67,7 +66,7 @@ class UserController @Autowired constructor(
 
     @PostMapping("update-location")
     @ResponseBody
-    fun editLocation(@RequestBody request: UpdateLocationRequest): BaseResponse<UserDTO>{
+    fun editLocation(@RequestBody request: UpdateLocationRequest): BaseResponse<UserDTO> {
 
         val response = BaseResponse<UserDTO>()
         val user = userRepository.findById(request.idUser)
@@ -76,7 +75,7 @@ class UserController @Autowired constructor(
 
             val location = objectMapper.writeValueAsString(request.location)
 
-            when(request.day){
+            when (request.day) {
 
                 "monday" -> {
                     it.locations.monday = location
@@ -100,7 +99,7 @@ class UserController @Autowired constructor(
                     it.locations.sunday = location
                 }
 
-                else ->{
+                else -> {
                     throw BadRequestException("Hari tidak valid")
                 }
 
@@ -109,7 +108,7 @@ class UserController @Autowired constructor(
             userRepository.save(it)
             response.data = it
 
-        },{
+        }, {
             throw BadRequestException("User tidak ditemukan")
         })
 
@@ -118,8 +117,48 @@ class UserController @Autowired constructor(
 
     }
 
+    @PostMapping("bulk-user-create")
+    @ResponseBody
+    fun bulkTestUser(
+            @RequestBody request: UserBulkRequest
+    ): BaseResponse<String> {
+
+        request.users.forEach {
+
+            val mUser = UserDTO(it.name)
+
+            mUser.locations.apply {
+
+                monday = getRandomLocation4Day(request.centroid, request.radius)
+                tuesday = getRandomLocation4Day(request.centroid, request.radius)
+                wednesday = getRandomLocation4Day(request.centroid, request.radius)
+                thursday = getRandomLocation4Day(request.centroid, request.radius)
+                friday = getRandomLocation4Day(request.centroid, request.radius)
+                saturday = getRandomLocation4Day(request.centroid, request.radius)
+                sunday = getRandomLocation4Day(request.centroid, request.radius)
+            }
+
+            userRepository.save(mUser)
+
+        }
+
+        return BaseResponse(data = "${request.users.size} Created!")
+
+    }
+
+    private fun getRandomLocation4Day(centroid: Point, radius: Double) = objectMapper.writeValueAsString(
+            PolygonUtils.generateWalkPoints(
+                    centroid,
+                    radius,
+                    24
+            ))
 
 
-
+    @PostMapping("bulk-user-delete")
+    @ResponseBody
+    fun bulkDelete(): BaseResponse<Boolean>{
+        userRepository.deleteAll()
+        return BaseResponse(data = true)
+    }
 
 }

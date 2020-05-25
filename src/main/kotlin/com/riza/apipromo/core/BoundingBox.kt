@@ -2,10 +2,10 @@ package com.riza.apipromo.core
 
 class BoundingBox(private val p: Polygon) {
 
-    private var xMin : Double
-    private var xMax : Double
-    private var yMax : Double
-    private var yMin : Double
+    var xMin : Double
+    var xMax : Double
+    var yMax : Double
+    var yMin : Double
 
     init {
         xMin = p.points[0].x
@@ -27,6 +27,7 @@ class BoundingBox(private val p: Polygon) {
         return (point.x >= xMin && point.x <= xMax
                 && point.y >= yMin && point.y <= yMax)
     }
+
 
 
 
