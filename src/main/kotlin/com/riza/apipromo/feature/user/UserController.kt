@@ -64,6 +64,24 @@ class UserController @Autowired constructor(
 
     }
 
+    @GetMapping("{id}")
+    @ResponseBody
+    fun getUser(
+            @PathVariable("id") id: Long
+    ): BaseResponse<UserDTO>{
+
+        val res = BaseResponse<UserDTO>()
+        userRepository.findById(id).ifPresentOrElse(
+                {
+                    res.data = it
+                },
+                {
+                    throw BadRequestException("id tidak ditemukan")
+                }
+        )
+        return res
+    }
+
     @PostMapping("update-location")
     @ResponseBody
     fun editLocation(@RequestBody request: UpdateLocationRequest): BaseResponse<UserDTO> {

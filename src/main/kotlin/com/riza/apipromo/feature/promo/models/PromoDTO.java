@@ -52,7 +52,7 @@ public class PromoDTO {
             joinColumns = @JoinColumn(name = "promo_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnoreProperties({"name", "locations", "fcmId", "promos"})
+    @JsonIgnoreProperties({"locations", "fcmId", "promos"})
     private Set<UserDTO> users;
 
     public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas, Set<UserDTO> users) {

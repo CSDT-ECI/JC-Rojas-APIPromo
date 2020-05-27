@@ -47,7 +47,7 @@ class PromoController @Autowired constructor(
 
         val areas: Iterable<AreaDTO> = areaRepository.findAllById(promoRequest.areaIds)
 
-        val user = getUserIn(areas)
+        val user = getUserIn(areas, promoRequest.threshold)
 
 
         val promo = PromoDTO(

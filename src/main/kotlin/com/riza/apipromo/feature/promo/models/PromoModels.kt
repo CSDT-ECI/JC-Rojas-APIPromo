@@ -13,5 +13,6 @@ data class AddPromoRequest(
         val value: Int = 0,
         val service: String = "",
         val description: String = "",
-        val areaIds: List<Long> = emptyList()
+        val areaIds: List<Long> = emptyList(),
+        val threshold: Int = 1
 )
