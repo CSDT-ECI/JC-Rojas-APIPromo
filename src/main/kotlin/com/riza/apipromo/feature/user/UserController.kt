@@ -145,15 +145,20 @@ class UserController @Autowired constructor(
 
             val mUser = UserDTO(it.name)
 
+            val center = PolygonUtils.generateRandomPointFrom(
+                    request.centroid,
+                    PolygonUtils.meterToDegree(500.0)
+            )
+
             mUser.locations.apply {
 
-                monday = getRandomLocation4Day(request.centroid, request.radius)
-                tuesday = getRandomLocation4Day(request.centroid, request.radius)
-                wednesday = getRandomLocation4Day(request.centroid, request.radius)
-                thursday = getRandomLocation4Day(request.centroid, request.radius)
-                friday = getRandomLocation4Day(request.centroid, request.radius)
-                saturday = getRandomLocation4Day(request.centroid, request.radius)
-                sunday = getRandomLocation4Day(request.centroid, request.radius)
+                monday = getRandomLocation4Day(center, request.radius)
+                tuesday = getRandomLocation4Day(center, request.radius)
+                wednesday = getRandomLocation4Day(center, request.radius)
+                thursday = getRandomLocation4Day(center, request.radius)
+                friday = getRandomLocation4Day(center, request.radius)
+                saturday = getRandomLocation4Day(center, request.radius)
+                sunday = getRandomLocation4Day(center, request.radius)
             }
 
             userRepository.save(mUser)
