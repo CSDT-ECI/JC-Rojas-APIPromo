@@ -31,6 +31,8 @@ public class PromoDTO {
 
     private String description;
 
+    private Integer threshold;
+
     @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
@@ -55,7 +57,7 @@ public class PromoDTO {
     @JsonIgnoreProperties({"locations", "fcmId", "promos"})
     private Set<UserDTO> users;
 
-    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas, Set<UserDTO> users) {
+    public PromoDTO(String code, Date startDate, Date endDate, PromoType type, Integer value, String service, String description, Set<AreaDTO> areas, Set<UserDTO> users, Integer threshold) {
         this.code = code;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -65,9 +67,20 @@ public class PromoDTO {
         this.description = description;
         this.areas = areas;
         this.users = users;
+        this.threshold = threshold;
     }
 
+
+
     public PromoDTO() {
+    }
+
+    public Integer getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(Integer threshold) {
+        this.threshold = threshold;
     }
 
     public Integer getValue() {

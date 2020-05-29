@@ -47,7 +47,7 @@ class PromoController @Autowired constructor(
 
         val areas: Iterable<AreaDTO> = areaRepository.findAllById(promoRequest.areaIds)
 
-        val user = getUserIn(areas, promoRequest.threshold)
+        val user = getUserLocIn(areas, promoRequest.threshold)
 
 
         val promo = PromoDTO(
@@ -59,7 +59,8 @@ class PromoController @Autowired constructor(
                 promoRequest.service,
                 promoRequest.description,
                 areas.toHashSet(),
-                user.toHashSet()
+                user.toHashSet(),
+                promoRequest.threshold
         )
 
         val result = promoRepository.save(promo)
@@ -70,7 +71,61 @@ class PromoController @Autowired constructor(
 
     }
 
-    private fun getUserIn(areas: Iterable<AreaDTO>, threshold: Int = 1): List<UserDTO> {
+    private fun getUserLocIn(areas: Iterable<AreaDTO>, threshold: Int = 1): List<UserDTO> {
+        val result = arrayListOf<UserDTO>()
+        val users = userRepository.findAll()
+
+        users.forEach { user: UserDTO ->
+
+            var isInside = false
+
+            val locationDay = arrayListOf<String>()
+            val locationHistory = arrayListOf<Point>()
+            //todo excluding
+            locationDay.add(user.locations.monday)
+            locationDay.add(user.locations.tuesday)
+            locationDay.add(user.locations.wednesday)
+            locationDay.add(user.locations.thursday)
+            locationDay.add(user.locations.friday)
+            locationDay.add(user.locations.saturday)
+            locationDay.add(user.locations.sunday)
+
+            locationDay.forEach {
+                val point = objectMapper.readValue<List<Point>>(it)
+                locationHistory.addAll(point)
+            }
+
+            for (area: AreaDTO in areas) {
+                val polygon = Utils.area2Polygon(area, objectMapper)
+                var insideCount = 0
+
+                for (it in locationHistory) {
+
+                    when (ALGORITHM) {
+                        "CN" -> if (pointInclusion.analyzePointByCN(polygon, it)) insideCount++
+                        else -> if (pointInclusion.analyzePointByWN(polygon, it)) insideCount++
+                    }
+
+                    if (insideCount >= threshold) {
+                        isInside = true
+                        break
+                    }
+                }
+
+                if (isInside) {
+                    result.add(user)
+                    break
+                }
+            }
+
+
+        }
+
+        return result
+    }
+
+
+    private fun getUserMedianIn(areas: Iterable<AreaDTO>, threshold: Int = 1): List<UserDTO> {
         val result = arrayListOf<UserDTO>()
         val users = userRepository.findAll()
 

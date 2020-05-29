@@ -3,9 +3,7 @@ package com.riza.apipromo.feature.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.riza.apipromo.base.BaseResponse
 import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.error.BadRequestException
-import com.riza.apipromo.feature.promo.PromoRepository
 import com.riza.apipromo.feature.user.models.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -15,8 +13,6 @@ import riza.com.cto.core.PolygonUtils
 @RequestMapping(path = ["user", "users"])
 class UserController @Autowired constructor(
         val objectMapper: ObjectMapper,
-        val pointInclusion: PointInclusion,
-        val promoRepository: PromoRepository,
         val userRepository: UserRepository
 ) {
 
@@ -147,7 +143,7 @@ class UserController @Autowired constructor(
 
             val center = PolygonUtils.generateRandomPointFrom(
                     request.centroid,
-                    PolygonUtils.meterToDegree(500.0)
+                    PolygonUtils.meterToDegree(1000.0)
             )
 
             mUser.locations.apply {
