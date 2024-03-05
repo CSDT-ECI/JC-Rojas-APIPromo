@@ -32,6 +32,7 @@ el análisis inicial del código original
 * Lógica dispersa en distintas clases, se podría agrupar dentro de los objetos de dominio
 * Uso de librerias con vulnerabilidades reportadas
 * Uso de versiones antiguas de Java y Kotlin
+* Objetos de DTO se utilizan tanto en el response de los endpoints como a los objetos de base de datos
 
 Adicionalmente, hay un error al ejecutar algunas fases del ciclo de vida usando maven
 ## Propuestas de refactorización
@@ -43,6 +44,8 @@ Adicionalmente, hay un error al ejecutar algunas fases del ciclo de vida usando 
   * Utilizar variables que describan mejor su propósito
   * Introducir métodos auxiliares
   * Remover los métodos que no se utilizan
+* Obtener los DTOs desde clases autogeneradas a partir del swagger
+* Separar las entidades de repositorio de los DTOs y de los objetos de dominio
 * Usar únicamente archivos .kt y utilizar los estándares de codificación de Kotlin
 * Actualizar las librerías y las versiones de Java y Kotlin
 
