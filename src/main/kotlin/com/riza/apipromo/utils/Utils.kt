@@ -15,13 +15,4 @@ object Utils {
                 ArrayList(points)
         )
     }
-
-    fun findMedianPoint(points: List<Point>): Point?{
-        if(points.isEmpty()) return null
-
-        val midX = points.sortedBy { it.x }[points.lastIndex / 2].x
-        val midY = points.sortedBy { it.y }[points.lastIndex / 2].y
-        return Point(midX, midY)
-    }
-
 }
