@@ -12,6 +12,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("io.spring.dependency-management") version "1.1.4"
     id("org.springframework.boot") version "3.2.3"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 dependencyManagement {
@@ -22,6 +23,14 @@ dependencyManagement {
 
 repositories {
     mavenCentral()
+}
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+
+    additionalEditorconfig.set(
+        mapOf(
+            "ktlint_standard_no-wildcard-imports" to "disabled",
+        ),
+    )
 }
 
 dependencies {
@@ -34,12 +43,11 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
 }
 
-
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc>() {
+tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 

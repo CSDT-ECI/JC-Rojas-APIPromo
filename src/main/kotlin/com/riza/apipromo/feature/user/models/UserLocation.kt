@@ -18,5 +18,5 @@ data class UserLocation(
     @Column(columnDefinition = "text")
     var saturday: String = "[]",
     @Column(columnDefinition = "text")
-    var sunday: String = "[]"
+    var sunday: String = "[]",
 )

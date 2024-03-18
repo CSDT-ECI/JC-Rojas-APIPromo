@@ -16,5 +16,5 @@ data class UserDTO(
     var locations: UserLocation = UserLocation(),
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
     @JsonIgnore
-    var promos: MutableSet<PromoDTO>? = null
+    var promos: MutableSet<PromoDTO>? = null,
 )

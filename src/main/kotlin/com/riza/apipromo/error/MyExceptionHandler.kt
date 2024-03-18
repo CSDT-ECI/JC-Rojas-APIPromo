@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class MyExceptionHandler {
-
     @ExceptionHandler
-    fun springHandleNotValid(ex:BadRequestException): ResponseEntity<String> {
+    fun springHandleNotValid(ex: BadRequestException): ResponseEntity<String> {
         return ResponseEntity(HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler
-    fun springHandleNotFound(ex:NotFoundException): ResponseEntity<String> {
+    fun springHandleNotFound(ex: NotFoundException): ResponseEntity<String> {
         return ResponseEntity(HttpStatus.NOT_FOUND)
     }
-
 }

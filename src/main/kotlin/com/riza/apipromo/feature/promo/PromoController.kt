@@ -20,125 +20,121 @@ import java.util.*
 
 @Controller
 @RequestMapping(path = ["promo"])
-class PromoController @Autowired constructor(
+class PromoController
+    @Autowired
+    constructor(
         private val areaRepository: AreaRepository,
         private val promoRepository: PromoRepository,
         private val userRepository: UserRepository,
         private val pointInclusion: PointInclusion,
-        private val objectMapper: ObjectMapper
-) {
-
-    companion object {
-
-        const val ALGORITHM = "CN"
-
-    }
-
-    @PostMapping("add")
-    @ResponseBody
-    fun addPromo(
-            @RequestBody promoRequest: AddPromoRequest
-    ): BaseResponse<PromoDTO> {
-
-        if (promoRequest.areaIds.isEmpty()) {
-            throw BadRequestException("Area ID Kosong")
+        private val objectMapper: ObjectMapper,
+    ) {
+        companion object {
+            const val ALGORITHM = "CN"
         }
 
-        val areas: Iterable<AreaDTO> = areaRepository.findAllById(promoRequest.areaIds)
-
-        val user = getUserLocIn(areas, promoRequest.threshold)
-
-
-        val promo = PromoDTO(
-                code = promoRequest.code,
-                startDate = Date(promoRequest.startDate),
-                endDate = Date(promoRequest.endDate),
-                type = promoRequest.type,
-                value = promoRequest.value,
-                service = promoRequest.service,
-                description = promoRequest.description,
-                areas = areas.toHashSet(),
-                users = user.toHashSet(),
-                threshold = promoRequest.threshold
-        )
-
-        val result = promoRepository.save(promo)
-
-        return BaseResponse(
-                data = result
-        )
-
-    }
-
-    private fun getUserLocIn(areas: Iterable<AreaDTO>, threshold: Int = 1): List<UserDTO> {
-        val result = arrayListOf<UserDTO>()
-        val users = userRepository.findAll()
-
-        users.forEach { user: UserDTO ->
-
-            var isInside = false
-
-            val locationDay = arrayListOf<String>()
-            val locationHistory = arrayListOf<Point>()
-            //todo excluding
-            locationDay.add(user.locations.monday)
-            locationDay.add(user.locations.tuesday)
-            locationDay.add(user.locations.wednesday)
-            locationDay.add(user.locations.thursday)
-            locationDay.add(user.locations.friday)
-            locationDay.add(user.locations.saturday)
-            locationDay.add(user.locations.sunday)
-
-            locationDay.forEach {
-                val point = objectMapper.readValue<List<Point>>(it)
-                locationHistory.addAll(point)
+        @PostMapping("add")
+        @ResponseBody
+        fun addPromo(
+            @RequestBody promoRequest: AddPromoRequest,
+        ): BaseResponse<PromoDTO> {
+            if (promoRequest.areaIds.isEmpty()) {
+                throw BadRequestException("Area ID Kosong")
             }
 
-            for (area: AreaDTO in areas) {
-                val polygon = Utils.area2Polygon(area, objectMapper)
-                var insideCount = 0
+            val areas: Iterable<AreaDTO> = areaRepository.findAllById(promoRequest.areaIds)
 
-                for (it in locationHistory) {
+            val user = getUserLocIn(areas, promoRequest.threshold)
 
-                    when (ALGORITHM) {
-                        "CN" -> if (pointInclusion.analyzePointByCN(polygon, it)) insideCount++
-                        else -> if (pointInclusion.analyzePointByWN(polygon, it)) insideCount++
+            val promo =
+                PromoDTO(
+                    code = promoRequest.code,
+                    startDate = Date(promoRequest.startDate),
+                    endDate = Date(promoRequest.endDate),
+                    type = promoRequest.type,
+                    value = promoRequest.value,
+                    service = promoRequest.service,
+                    description = promoRequest.description,
+                    areas = areas.toHashSet(),
+                    users = user.toHashSet(),
+                    threshold = promoRequest.threshold,
+                )
+
+            val result = promoRepository.save(promo)
+
+            return BaseResponse(
+                data = result,
+            )
+        }
+
+        private fun getUserLocIn(
+            areas: Iterable<AreaDTO>,
+            threshold: Int = 1,
+        ): List<UserDTO> {
+            val result = arrayListOf<UserDTO>()
+            val users = userRepository.findAll()
+
+            users.forEach { user: UserDTO ->
+
+                var isInside = false
+
+                val locationDay = arrayListOf<String>()
+                val locationHistory = arrayListOf<Point>()
+                // todo excluding
+                locationDay.add(user.locations.monday)
+                locationDay.add(user.locations.tuesday)
+                locationDay.add(user.locations.wednesday)
+                locationDay.add(user.locations.thursday)
+                locationDay.add(user.locations.friday)
+                locationDay.add(user.locations.saturday)
+                locationDay.add(user.locations.sunday)
+
+                locationDay.forEach {
+                    val point = objectMapper.readValue<List<Point>>(it)
+                    locationHistory.addAll(point)
+                }
+
+                for (area: AreaDTO in areas) {
+                    val polygon = Utils.area2Polygon(area, objectMapper)
+                    var insideCount = 0
+
+                    for (it in locationHistory) {
+                        when (ALGORITHM) {
+                            "CN" -> if (pointInclusion.analyzePointByCN(polygon, it)) insideCount++
+                            else -> if (pointInclusion.analyzePointByWN(polygon, it)) insideCount++
+                        }
+
+                        if (insideCount >= threshold) {
+                            isInside = true
+                            break
+                        }
                     }
 
-                    if (insideCount >= threshold) {
-                        isInside = true
+                    if (isInside) {
+                        result.add(user)
                         break
                     }
                 }
-
-                if (isInside) {
-                    result.add(user)
-                    break
-                }
             }
 
-
+            return result
         }
 
-        return result
-    }
-
-    @GetMapping("all")
-    @ResponseBody
-    fun getAllPromo(): BaseResponse<Iterable<PromoDTO>> {
-        var result: Iterable<PromoDTO>? = null
-        validate {
-            result = promoRepository.findAll()
+        @GetMapping("all")
+        @ResponseBody
+        fun getAllPromo(): BaseResponse<Iterable<PromoDTO>> {
+            var result: Iterable<PromoDTO>? = null
+            validate {
+                result = promoRepository.findAll()
+            }
+            return BaseResponse(data = result)
         }
-        return BaseResponse(data = result)
-    }
-    private fun validate(action: () -> Unit) {
-        try {
-            action.invoke()
-        } catch (e: Exception) {
-            throw BadRequestException(e.message.toString())
+
+        private fun validate(action: () -> Unit) {
+            try {
+                action.invoke()
+            } catch (e: Exception) {
+                throw BadRequestException(e.message.toString())
+            }
         }
     }
-
-
-}
