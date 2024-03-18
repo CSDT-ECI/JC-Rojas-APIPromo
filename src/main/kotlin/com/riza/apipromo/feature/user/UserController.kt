@@ -21,7 +21,7 @@ class UserController @Autowired constructor(
     fun addUser(@RequestBody request: AddUserRequest): BaseResponse<UserDTO> {
 
         val user = userRepository.save(
-                UserDTO(request.name)
+                UserDTO(name = request.name)
         )
 
         return BaseResponse(
@@ -139,7 +139,7 @@ class UserController @Autowired constructor(
 
         request.users.forEach {
 
-            val mUser = UserDTO(it.name)
+            val mUser = UserDTO(name = it.name)
 
             val center = PolygonUtils.generateRandomPointFrom(
                     request.centroid,

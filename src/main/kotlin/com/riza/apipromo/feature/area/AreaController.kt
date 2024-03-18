@@ -6,7 +6,7 @@ import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.error.BadRequestException
 import com.riza.apipromo.feature.area.models.*
 import com.riza.apipromo.utils.Utils
-import org.hibernate.annotations.common.util.impl.LoggerFactory
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -19,7 +19,7 @@ class AreaController @Autowired constructor(
         private val areaRepository: AreaRepository
 ) {
 
-    private val logger = LoggerFactory.logger(AreaController::class.java)
+    private val logger = LoggerFactory.getLogger(AreaController::class.java)
 
     @GetMapping("test")
     @ResponseBody
@@ -36,9 +36,9 @@ class AreaController @Autowired constructor(
 
         val points = objectMapper.writeValueAsString(body.points)
         val area = AreaDTO(
-                body.name,
-                points,
-                emptySet()
+            name = body.name,
+            points = points,
+            promos = mutableSetOf()
         )
 
         val saved = areaRepository.save(area)

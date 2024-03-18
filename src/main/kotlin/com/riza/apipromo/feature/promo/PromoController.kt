@@ -50,16 +50,16 @@ class PromoController @Autowired constructor(
 
 
         val promo = PromoDTO(
-                promoRequest.code,
-                Date(promoRequest.startDate),
-                Date(promoRequest.endDate),
-                promoRequest.type,
-                promoRequest.value,
-                promoRequest.service,
-                promoRequest.description,
-                areas.toHashSet(),
-                user.toHashSet(),
-                promoRequest.threshold
+                code = promoRequest.code,
+                startDate = Date(promoRequest.startDate),
+                endDate = Date(promoRequest.endDate),
+                type = promoRequest.type,
+                value = promoRequest.value,
+                service = promoRequest.service,
+                description = promoRequest.description,
+                areas = areas.toHashSet(),
+                users = user.toHashSet(),
+                threshold = promoRequest.threshold
         )
 
         val result = promoRepository.save(promo)
