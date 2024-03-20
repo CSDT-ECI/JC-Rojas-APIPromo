@@ -27,16 +27,15 @@ class PointInclusion {
         var crossings = 0
 
         val points = poly.points
-        val n = points.size - 1
 
-        for (i in 0 until n) {
-            val edge1 = points[i]
-            val edge2 = points[i + 1]
+        for (i in 0 until points.size - 1) {
+            val edgeStart = points[i]
+            val edgeEnd = points[i + 1]
 
             if (
-                isPointBetweenYEdgesCoordinates(point, edge1, edge2) && isPointOnLeftOfEdges(point, edge1, edge2)
+                isPointBetweenYEdgesCoordinates(point, edgeStart, edgeEnd) && isPointOnLeftOfEdges(point, edgeStart, edgeEnd)
             ) {
-                val xIntersection = calculateXIntersection(point, edge1, edge2)
+                val xIntersection = calculateXIntersection(point, edgeStart, edgeEnd)
                 if (point.x < xIntersection) {
                     ++crossings
                 }
@@ -48,23 +47,23 @@ class PointInclusion {
 
     private fun isPointOnLeftOfEdges(
         point: Point,
-        edge1: Point,
-        edge2: Point,
-    ) = point.x <= edge1.x && point.x <= edge2.x
+        edgeStart: Point,
+        edgeEnd: Point,
+    ) = point.x <= edgeStart.x && point.x <= edgeEnd.x
 
     private fun isPointBetweenYEdgesCoordinates(
         point: Point,
-        edge1: Point,
-        edge2: Point,
-    ) = (edge1.y <= point.y && edge2.y > point.y) || (edge1.y > point.y && edge2.y <= point.y)
+        edgeStart: Point,
+        edgeEnd: Point,
+    ) = (edgeStart.y <= point.y && edgeEnd.y > point.y) || (edgeStart.y > point.y && edgeEnd.y <= point.y)
 
     private fun calculateXIntersection(
         point: Point,
-        edge1: Point,
-        edge2: Point,
+        edgeStart: Point,
+        edgeEnd: Point,
     ): Double {
-        val projection = (point.y - edge1.y) / (edge2.y - edge1.y)
-        return edge1.x + projection * (edge2.x - edge1.x)
+        val projection = (point.y - edgeStart.y) / (edgeEnd.y - edgeStart.y)
+        return edgeStart.x + projection * (edgeEnd.x - edgeStart.x)
     }
 
     /*
@@ -88,36 +87,45 @@ class PointInclusion {
 
     private fun countWN(
         poly: Polygon,
-        p: Point,
+        point: Point,
     ): Int {
         var wn = 0
 
-        val v = poly.points
-        val n = v.size - 1
+        val points = poly.points
 
-        for (i in 0 until n) {
-            if (v[i].x == v[i + 1].x) continue // rule 3
+        for (i in 0 until points.size - 1) {
+            val edgeStart = points[i]
+            val edgeEnd = points[i + 1]
 
-            if (v[i].y <= p.y) {
-                if (v[i + 1].y > p.y) {
-                    if (isLeft(v[i], v[i + 1], p)) ++wn
-                }
-            } else {
-                if (v[i + 1].y <= p.y) {
-                    if (!isLeft(v[i], v[i+1], p)) --wn
-                }
-            }
+            wn += calculateCrossingsForEdge(edgeStart, point, edgeEnd)
         }
 
         return wn
     }
 
-    private fun isLeft(
-        p0: Point,
-        p1: Point,
-        p2: Point,
-    ): Boolean {
-        val n = (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)
-        return (n > 0)
+    private fun calculateCrossingsForEdge(
+        edgeStart: Point,
+        point: Point,
+        edgeEnd: Point,
+    ): Int {
+        if (edgeStart.y <= point.y) {
+            if (edgeEnd.y > point.y) {
+                if (checkPointPositionAgainstLine(edgeStart, edgeEnd, point) > 0) return 1
+            }
+        } else {
+            if (edgeEnd.y <= point.y) {
+                if (checkPointPositionAgainstLine(edgeStart, edgeEnd, point) < 0) return -1
+            }
+        }
+        return 0
+    }
+
+    private fun checkPointPositionAgainstLine(
+        edgeStart: Point,
+        edgeEnd: Point,
+        point: Point,
+    ): Double {
+        val n = (edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (point.x - edgeStart.x) * (edgeEnd.y - edgeStart.y)
+        return n
     }
 }
