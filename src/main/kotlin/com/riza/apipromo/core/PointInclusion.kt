@@ -97,16 +97,16 @@ class PointInclusion {
             val edgeStart = points[i]
             val edgeEnd = points[i + 1]
 
-            wn += calculateCrossingsForEdge(edgeStart, point, edgeEnd)
+            wn += calculateCrossingValueForEdge(edgeStart, edgeEnd, point)
         }
 
         return wn
     }
 
-    private fun calculateCrossingsForEdge(
+    private fun calculateCrossingValueForEdge(
         edgeStart: Point,
-        point: Point,
         edgeEnd: Point,
+        point: Point,
     ): Int {
         if (edgeStart.y <= point.y) {
             if (edgeEnd.y > point.y) {
@@ -125,7 +125,6 @@ class PointInclusion {
         edgeEnd: Point,
         point: Point,
     ): Double {
-        val n = (edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (point.x - edgeStart.x) * (edgeEnd.y - edgeStart.y)
-        return n
+        return (edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (point.x - edgeStart.x) * (edgeEnd.y - edgeStart.y)
     }
 }
