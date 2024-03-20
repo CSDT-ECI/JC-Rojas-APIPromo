@@ -22,29 +22,49 @@ class PointInclusion {
 
     private fun countCN(
         poly: Polygon,
-        p: Point,
+        point: Point,
     ): Int {
-        var cn = 0
+        var crossings = 0
 
-        val v = poly.points
-        val n = v.size - 1
+        val points = poly.points
+        val n = points.size - 1
 
         for (i in 0 until n) {
-            if (v[i].x == v[i + 1].x) continue // rule 3
+            val edge1 = points[i]
+            val edge2 = points[i + 1]
 
             if (
-                (v[i].y <= p.y && v[i + 1].y > p.y) || // rule1
-                (v[i].y > p.y && v[i + 1].y <= p.y) // rule 2
+                isPointBetweenYEdgesCoordinates(point, edge1, edge2) && isPointOnLeftOfEdges(point, edge1, edge2)
             ) {
-                val ray = (p.y - v[i].y) / (v[i + 1].y - v[i].y)
-
-                if (p.x < v[i].x + ray * (v[i + 1].x - v[i].x)) {
-                    ++cn
+                val xIntersection = calculateXIntersection(point, edge1, edge2)
+                if (point.x < xIntersection) {
+                    ++crossings
                 }
             }
         }
 
-        return cn
+        return crossings
+    }
+
+    private fun isPointOnLeftOfEdges(
+        point: Point,
+        edge1: Point,
+        edge2: Point,
+    ) = point.x <= edge1.x && point.x <= edge2.x
+
+    private fun isPointBetweenYEdgesCoordinates(
+        point: Point,
+        edge1: Point,
+        edge2: Point,
+    ) = (edge1.y <= point.y && edge2.y > point.y) || (edge1.y > point.y && edge2.y <= point.y)
+
+    private fun calculateXIntersection(
+        point: Point,
+        edge1: Point,
+        edge2: Point,
+    ): Double {
+        val projection = (point.y - edge1.y) / (edge2.y - edge1.y)
+        return edge1.x + projection * (edge2.x - edge1.x)
     }
 
     /*
