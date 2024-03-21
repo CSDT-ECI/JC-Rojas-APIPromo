@@ -2,7 +2,6 @@ group = "com.riza"
 version = "0.0.1-SNAPSHOT"
 description = "APIPromo"
 java.sourceCompatibility = JavaVersion.VERSION_17
-extra["springCloudVersion"] = "2023.0.0"
 
 plugins {
     val kotlinVersion = "1.9.20"
@@ -13,12 +12,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.springframework.boot") version "3.2.3"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-    }
 }
 
 repositories {
