@@ -26,6 +26,11 @@ al de detección de puntos en poligonos
 3. Modulo users: Operaciones CRUD, es dependencia del modulo de promos 
 4. Modulo promos: Operaciones sobre areas y usuarios
 
+## Alcance de etapa 3:
+Durante esta etapa de realizarán las pruebas relacionadas al modulo core, los otros modulos seran probados
+y refactorizados en etapas siguientes.
+
+
 ## Pruebas del módulo core
 ## PointInclusion.kt 
 Esta clase contiene la implementación de dos algoritmos de geometría para determinar si un punto está dentro de un polígono
@@ -62,7 +67,6 @@ para este algoritmo el resultado de esta prueba cambia, adicionalmente se añade
 Dado que las implementaciones presentadas no estaban pasando las pruebas fue necesario corregir las implementaciones.
 Una vez las implementaciones pasaron los casos de prueba propuestos, se decidió refactorizar la lógica del código para 
 mejorar la legibilidad y reducir los code smells de este módulo.
-
 
 ## BoundingBox.kt
 Esta clase representa un cuadrado que se genera al rededor de un polígono dado y se encarga de verificar si un
