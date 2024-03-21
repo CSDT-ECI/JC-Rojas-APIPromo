@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class PointInclusionWindingNumberTests {
+    private val pointInclusion = PointInclusion()
+
     @Test
-    fun pointInsideSquareShouldBeTrue() {
+    fun pointSquareShouldBeTrue() {
         val points =
             arrayListOf(
                 Point(1.0, 1.0),
@@ -16,12 +18,12 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(2.5, 2.5)
+        val point = Point(2.5, 2.5)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
@@ -33,12 +35,12 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(0.0, 0.0)
+        val point = Point(0.0, 0.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
@@ -50,12 +52,12 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(1.5, 4.0)
+        val point = Point(1.5, 4.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
@@ -67,12 +69,12 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(1.5, 1.0)
+        val point = Point(1.5, 1.0)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
@@ -84,12 +86,12 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(1.0, 1.5)
+        val point = Point(1.0, 1.5)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
@@ -101,16 +103,16 @@ class PointInclusionWindingNumberTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(4.0, 1.5)
+        val point = Point(4.0, 1.5)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
-    fun pointInsideASelfIntersectionShouldBeTrue() {
+    fun pointASelfIntersectionShouldBeTrue() {
         val points =
             arrayListOf(
                 Point(1.0, 1.0),
@@ -124,16 +126,16 @@ class PointInclusionWindingNumberTests {
                 Point(3.0, 7.0),
                 Point(1.0, 7.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(2.5, 5.0)
+        val point = Point(2.5, 5.0)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
-    fun pointInsidePolygonWithSelfIntersectionsShouldBeTrue() {
+    fun pointPolygonWithSelfIntersectionsShouldBeTrue() {
         val points =
             arrayListOf(
                 Point(1.0, 1.0),
@@ -147,16 +149,16 @@ class PointInclusionWindingNumberTests {
                 Point(3.0, 8.0),
                 Point(1.0, 8.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(1.5, 5.0)
+        val point = Point(1.5, 5.0)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertTrue(pointInclusion.analyzePointByWN(polygon, point))
     }
 
     @Test
-    fun pointInsideInteriorRegionsOfComplexPolygonShouldBeFalse() {
+    fun pointInteriorRegionsOfComplexPolygonShouldBeFalse() {
         val points =
             arrayListOf(
                 Point(1.0, 1.0),
@@ -170,11 +172,11 @@ class PointInclusionWindingNumberTests {
                 Point(3.0, 7.0),
                 Point(1.0, 7.0),
             )
-        val pointInclusion = PointInclusion()
+
         val polygon = Polygon("test", points)
 
-        val pointInside = Point(4.5, 3.0)
+        val point = Point(4.5, 3.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, pointInside))
+        Assertions.assertFalse(pointInclusion.analyzePointByWN(polygon, point))
     }
 }

@@ -1,6 +1,6 @@
 package com.riza.apipromo.core
 
-class BoundingBox(private val p: Polygon) {
+data class BoundingBox(private val p: Polygon) {
     var xMin: Double
     var xMax: Double
     var yMax: Double
