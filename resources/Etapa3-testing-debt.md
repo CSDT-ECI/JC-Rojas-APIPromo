@@ -43,6 +43,7 @@ A continuación se presentan los casos de prueba diseñados para esta clase
 En la siguiente figura se muestra las pruebas generales para ambos algoritmos, donde los puntos Rojos se consideran fuera
 del cuadrado, mientras que los puntos verdes dentro, la razón para determinar lo puntos en los bordes superior y derecho 
 fuera del poligono se explican en la documentación compartida anteriormente
+
 ![SquareTestsCN.png](img%2FEtapa3%2FSquareTestsCN.png)
 
 ### Casos de Crossing-Number 
@@ -50,12 +51,14 @@ Adicionalmente a este algoritmo se añaden los siguientes casos, este es uno de 
 dónde si un punto se encuentra en una  zona donde el poligono se auto-intersecta se considera fuera del polígono, se añade
 un caso donde un punto esta en una zona de auto-intersección y otro caso con un punto considerado dentro del polígono, tal como se
 muestra en la siguiente imagen
+
 ![complexPolygonCN.png](img%2FEtapa3%2FcomplexPolygonCN.png)
 
 ### Casos de Winding-Number
 A diferencia del algoritmo de Crossing-Number, las zonas de auto-intersección se consideran parte del polígono, por lo que
 para este algoritmo el resultado de esta prueba cambia, adicionalmente se añade un caso donde el punto está en un
 área interna del polígono que, donde a pesar de ser un área dentro del perímetro del polígono no se considera parte el
+
 ![complexPolygonWN.png](img%2FEtapa3%2FcomplexPolygonWN.png)
 
 ### Resultados Crossing-Number
@@ -72,6 +75,7 @@ mejorar la legibilidad y reducir los code smells de este módulo.
 Esta clase representa un cuadrado que se genera al rededor de un polígono dado y se encarga de verificar si un
 punto se encuentra o no dentro de dicho cuadrado, la ilustración que representa los casos de prueba utilizados
 se presenta a continuación:
+
 ![boundingBox.png](img%2FEtapa3%2FboundingBox.png)
 ### Resultados
 ![resultsBoundingBox.png](img%2FEtapa3%2FresultsBoundingBox.png)
