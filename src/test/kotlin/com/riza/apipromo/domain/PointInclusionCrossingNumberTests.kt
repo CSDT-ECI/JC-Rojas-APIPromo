@@ -1,13 +1,12 @@
 package com.riza.apipromo.domain
 
 import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.PointInclusion
 import com.riza.apipromo.core.Polygon
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class PointInclusionCrossingNumberTests {
-    private val pointInclusion = PointInclusion()
+    private val crossingNumberAlgorithm = CrossingNumberAlgorithm()
 
     @Test
     fun pointSquareShouldBeTrue() {
@@ -23,7 +22,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(2.5, 2.5)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertTrue(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -40,7 +39,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(0.0, 0.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertFalse(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -57,7 +56,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(1.5, 4.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertFalse(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -74,7 +73,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(1.5, 1.0)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertTrue(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -91,7 +90,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(1.0, 1.5)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertTrue(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -108,7 +107,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(4.0, 1.5)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertFalse(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -131,7 +130,7 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(2.5, 5.0)
 
-        Assertions.assertFalse(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertFalse(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 
     @Test
@@ -154,6 +153,6 @@ class PointInclusionCrossingNumberTests {
 
         val point = Point(1.5, 5.0)
 
-        Assertions.assertTrue(pointInclusion.analyzePointByCN(polygon, point))
+        Assertions.assertTrue(crossingNumberAlgorithm.isPointInsidePolygon(point, polygon))
     }
 }
