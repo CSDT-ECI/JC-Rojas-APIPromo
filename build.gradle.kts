@@ -1,3 +1,5 @@
+import org.sonarqube.gradle.SonarTask
+
 group = "com.riza"
 version = "0.0.1-SNAPSHOT"
 description = "APIPromo"
@@ -16,6 +18,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.springframework.boot") version "3.2.3"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    id("org.sonarqube") version "4.4.1.3373"
+    id("jacoco")
 }
 
 repositories {
@@ -39,6 +43,25 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoVersion")
     testImplementation("org.springframework.security:spring-security-test")
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "temp")
+        property("sonar.organization", "temp")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+    }
+}
+
+tasks.withType<SonarTask> {
+    dependsOn(tasks.named("test"))
+    dependsOn(tasks.named("jacocoTestReport"))
 }
 
 tasks.withType<JavaCompile> {
