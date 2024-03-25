@@ -48,7 +48,7 @@ a nivel de código durante el análisis inicial
 
 | Propuesta                                                                                                     | Estado                                    |
 |---------------------------------------------------------------------------------------------------------------|-------------------------------------------|
-| Reorganizar la estructura de archivos del proyecto                                                            | DONE :white_check_mark:                   |
+| Reorganizar la estructura de archivos del proyecto                                                            | Partially :eyes:                          |
 | Incluir servicios con las responsabilidades de llamar a los repositorios y administrar los objetos de dominio | DONE :white_check_mark:                   |
 | Refactorizar los métodos                                                                                      | Partially :eyes:                          |
 | Obtener los DTOs desde clases autogeneradas a partir del swagger                                              | NOT STARTED :negative_squared_cross_mark: |
