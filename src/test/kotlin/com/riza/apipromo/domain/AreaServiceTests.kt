@@ -34,7 +34,7 @@ class AreaServiceTests {
     lateinit var areaService: AreaService
 
     @BeforeEach
-    fun setupService()  {
+    fun setupService() {
         areaService =
             AreaService(
                 areaRepository,

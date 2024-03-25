@@ -47,4 +47,7 @@ class UseCaseSetup {
     ): PromoService {
         return PromoService(promoRepository, areaRepository, userRepository, pointInclusionStrategies.toMap(), objectMapper)
     }
+
+    @Bean
+    fun getObjectMapper() = ObjectMapper()
 }
