@@ -34,11 +34,14 @@ class AreaServiceTests {
     lateinit var areaService: AreaService
 
     @BeforeEach
-    fun setupService(){
-        areaService = AreaService(areaRepository,
-            mapOf(PointInclusionMethod.CN to crossingNumberAlgorithm, PointInclusionMethod.WN to windingNumberAlgorithm)
-        )
+    fun setupService()  {
+        areaService =
+            AreaService(
+                areaRepository,
+                mapOf(PointInclusionMethod.CN to crossingNumberAlgorithm, PointInclusionMethod.WN to windingNumberAlgorithm),
+            )
     }
+
     @Test
     fun saveAreaShouldCallRepositoryAndReturnSavedArea() {
         val points =
@@ -55,9 +58,9 @@ class AreaServiceTests {
 
         `when`(areaRepository.save(testArea)).thenReturn(expectedArea)
 
-        Assertions.assertEquals(areaService.save(testArea),expectedArea)
-
+        Assertions.assertEquals(areaService.save(testArea), expectedArea)
     }
+
     @Test
     fun checkAllPointInAreaShouldCallAreaRepositoryAndCalculatePointsUsingGivenCNMethod() {
         val areaPoints =
@@ -67,25 +70,26 @@ class AreaServiceTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointsToCheck = listOf(
-            Point(1.1, 1.1),
-            Point(3.9, 2.0),
-            Point(3.5, 2.0),
-        )
+        val pointsToCheck =
+            listOf(
+                Point(1.1, 1.1),
+                Point(3.9, 2.0),
+                Point(3.5, 2.0),
+            )
 
         val polygon = Polygon("test", areaPoints)
         val storedArea = Area(id = 1, polygon = polygon, promos = mutableSetOf())
 
         `when`(areaRepository.findById(1)).thenReturn(storedArea)
 
-        val expectedValues = listOf(true,true,true)
+        val expectedValues = listOf(true, true, true)
 
         `when`(crossingNumberAlgorithm.isPointInsidePolygon(any(), eq(polygon))).thenReturn(true)
 
-        Assertions.assertEquals(areaService.checkAllPointsInArea(storedArea.id!!,pointsToCheck,PointInclusionMethod.CN),expectedValues)
+        Assertions.assertEquals(areaService.checkAllPointsInArea(storedArea.id!!, pointsToCheck, PointInclusionMethod.CN), expectedValues)
 
-        verify(crossingNumberAlgorithm,times(3)).isPointInsidePolygon(any(),eq(polygon))
-        verify(windingNumberAlgorithm,times(0)).isPointInsidePolygon(any(),eq(polygon))
+        verify(crossingNumberAlgorithm, times(3)).isPointInsidePolygon(any(), eq(polygon))
+        verify(windingNumberAlgorithm, times(0)).isPointInsidePolygon(any(), eq(polygon))
     }
 
     @Test
@@ -97,40 +101,41 @@ class AreaServiceTests {
                 Point(4.0, 4.0),
                 Point(1.0, 4.0),
             )
-        val pointsToCheck = listOf(
-            Point(1.1, 1.1),
-            Point(3.9, 2.0),
-            Point(3.5, 2.0),
-        )
+        val pointsToCheck =
+            listOf(
+                Point(1.1, 1.1),
+                Point(3.9, 2.0),
+                Point(3.5, 2.0),
+            )
 
         val polygon = Polygon("test", areaPoints)
         val storedArea = Area(id = 1, polygon = polygon, promos = mutableSetOf())
 
         `when`(areaRepository.findById(1)).thenReturn(storedArea)
 
-        val expectedValues = listOf(true,true,true)
+        val expectedValues = listOf(true, true, true)
 
-        `when`(windingNumberAlgorithm.isPointInsidePolygon(any(), eq(polygon) )).thenReturn(true)
+        `when`(windingNumberAlgorithm.isPointInsidePolygon(any(), eq(polygon))).thenReturn(true)
 
-        Assertions.assertEquals(areaService.checkAllPointsInArea(storedArea.id!!,pointsToCheck,PointInclusionMethod.WN),expectedValues)
+        Assertions.assertEquals(areaService.checkAllPointsInArea(storedArea.id!!, pointsToCheck, PointInclusionMethod.WN), expectedValues)
 
-        verify(windingNumberAlgorithm,times(3)).isPointInsidePolygon(any(),eq(polygon))
-        verify(crossingNumberAlgorithm,times(0)).isPointInsidePolygon(any(),eq(polygon))
+        verify(windingNumberAlgorithm, times(3)).isPointInsidePolygon(any(), eq(polygon))
+        verify(crossingNumberAlgorithm, times(0)).isPointInsidePolygon(any(), eq(polygon))
     }
 
     @Test
     fun checkAllPointInAreaShouldReturnNullIfAreaIsNotInRepository() {
-
-        val pointsToCheck = listOf(
-            Point(1.1, 1.1),
-            Point(3.9, 2.0),
-            Point(3.5, 2.0),
-        )
-        val nonexistentAreaId= 0L
+        val pointsToCheck =
+            listOf(
+                Point(1.1, 1.1),
+                Point(3.9, 2.0),
+                Point(3.5, 2.0),
+            )
+        val nonexistentAreaId = 0L
 
         `when`(areaRepository.findById(nonexistentAreaId)).thenReturn(null)
 
-        Assertions.assertNull(areaService.checkAllPointsInArea(nonexistentAreaId,pointsToCheck,PointInclusionMethod.WN))
+        Assertions.assertNull(areaService.checkAllPointsInArea(nonexistentAreaId, pointsToCheck, PointInclusionMethod.WN))
     }
 
     @Test
@@ -151,12 +156,12 @@ class AreaServiceTests {
 
         val expectedValues = true
 
-        `when`(crossingNumberAlgorithm.isPointInsidePolygon(pointToCheck, polygon )).thenReturn(true)
+        `when`(crossingNumberAlgorithm.isPointInsidePolygon(pointToCheck, polygon)).thenReturn(true)
 
-        Assertions.assertEquals(areaService.checkPointInArea(storedArea.id!!,pointToCheck,PointInclusionMethod.CN),expectedValues)
+        Assertions.assertEquals(areaService.checkPointInArea(storedArea.id!!, pointToCheck, PointInclusionMethod.CN), expectedValues)
 
-        verify(windingNumberAlgorithm,times(0)).isPointInsidePolygon(pointToCheck,polygon)
-        verify(crossingNumberAlgorithm,times(1)).isPointInsidePolygon(pointToCheck,polygon)
+        verify(windingNumberAlgorithm, times(0)).isPointInsidePolygon(pointToCheck, polygon)
+        verify(crossingNumberAlgorithm, times(1)).isPointInsidePolygon(pointToCheck, polygon)
     }
 
     @Test
@@ -177,21 +182,21 @@ class AreaServiceTests {
 
         val expectedValues = true
 
-        `when`(windingNumberAlgorithm.isPointInsidePolygon(pointToCheck, polygon )).thenReturn(true)
+        `when`(windingNumberAlgorithm.isPointInsidePolygon(pointToCheck, polygon)).thenReturn(true)
 
-        Assertions.assertEquals(areaService.checkPointInArea(storedArea.id!!,pointToCheck,PointInclusionMethod.WN),expectedValues)
+        Assertions.assertEquals(areaService.checkPointInArea(storedArea.id!!, pointToCheck, PointInclusionMethod.WN), expectedValues)
 
-        verify(windingNumberAlgorithm,times(1)).isPointInsidePolygon(pointToCheck,polygon)
-        verify(crossingNumberAlgorithm,times(0)).isPointInsidePolygon(pointToCheck,polygon)
+        verify(windingNumberAlgorithm, times(1)).isPointInsidePolygon(pointToCheck, polygon)
+        verify(crossingNumberAlgorithm, times(0)).isPointInsidePolygon(pointToCheck, polygon)
     }
+
     @Test
     fun checkPointInAreaShouldReturnNullIfAreaIsNotInRepository() {
-
         val pointToCheck = Point(1.1, 1.1)
-        val nonexistentAreaId= 0L
+        val nonexistentAreaId = 0L
         `when`(areaRepository.findById(nonexistentAreaId)).thenReturn(null)
 
-        Assertions.assertNull(areaService.checkPointInArea(nonexistentAreaId,pointToCheck,PointInclusionMethod.WN))
+        Assertions.assertNull(areaService.checkPointInArea(nonexistentAreaId, pointToCheck, PointInclusionMethod.WN))
     }
 
     @Test
@@ -209,17 +214,16 @@ class AreaServiceTests {
         val expectedArea1 = Area(polygon = polygon1, promos = mutableSetOf())
         val expectedArea2 = Area(polygon = polygon2, promos = mutableSetOf())
 
-        val expectedAreas = listOf(expectedArea1,expectedArea2)
+        val expectedAreas = listOf(expectedArea1, expectedArea2)
 
         `when`(areaRepository.findAll()).thenReturn(expectedAreas)
 
-        Assertions.assertEquals(areaService.findAll(),expectedAreas)
-
+        Assertions.assertEquals(areaService.findAll(), expectedAreas)
     }
+
     @Test
     fun deleteAreaByIdShouldCallRepositoryWithGivenId() {
         areaService.deleteById(1)
         verify(areaRepository).deleteById(1)
     }
-
 }
