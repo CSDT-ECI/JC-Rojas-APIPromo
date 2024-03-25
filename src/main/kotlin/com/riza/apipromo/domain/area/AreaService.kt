@@ -30,7 +30,7 @@ class AreaService(
         return areaRepository.save(area)
     }
 
-    fun findAll(): Iterable<Area> {
+    fun findAll(): List<Area> {
         return areaRepository.findAll()
     }
 

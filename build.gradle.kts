@@ -33,6 +33,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
     implementation("mysql:mysql-connector-java:8.0.33")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:5.2.1")
     testImplementation("org.springframework.security:spring-security-test")
 }
 
