@@ -5,6 +5,7 @@ import com.riza.apipromo.core.PointInclusionMethod
 import com.riza.apipromo.domain.PointInclusionAlgorithm
 import com.riza.apipromo.domain.area.AreaRepository
 import com.riza.apipromo.domain.user.UserRepository
+import jdk.jshell.spi.ExecutionControl
 
 class PromoService(
     private val promoRepository: PromoRepository,
@@ -25,7 +26,9 @@ class PromoService(
         val areas = areaRepository.findAllById(areaIds)
         val users = userRepository.findAll()
         promo.areas = areas.toMutableSet()
-        promo.calculateBenefitedUsers(users, areas, pointInclusionStrategies[method]!!, objectMapper)
+        val pointInclusionStrategy = pointInclusionStrategies[method]
+            ?: throw ExecutionControl.NotImplementedException("Selected method is not implemented in the system")
+        promo.calculateBenefitedUsers(users, areas, pointInclusionStrategy, objectMapper)
 
         return promoRepository.save(promo)
     }

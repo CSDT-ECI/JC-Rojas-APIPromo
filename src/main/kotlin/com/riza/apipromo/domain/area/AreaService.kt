@@ -3,6 +3,7 @@ package com.riza.apipromo.domain.area
 import com.riza.apipromo.core.Point
 import com.riza.apipromo.core.PointInclusionMethod
 import com.riza.apipromo.domain.PointInclusionAlgorithm
+import jdk.jshell.spi.ExecutionControl.NotImplementedException
 
 class AreaService(
     private val areaRepository: AreaRepository,
@@ -14,7 +15,9 @@ class AreaService(
         method: PointInclusionMethod,
     ): Boolean? {
         val area = areaRepository.findById(areaId)
-        return area?.checkPointInsideArea(point, pointInclusionStrategies[method]!!)
+        val pointInclusionStrategy = pointInclusionStrategies[method]
+            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        return area?.checkPointInsideArea(point, pointInclusionStrategy)
     }
 
     fun checkAllPointsInArea(
@@ -23,7 +26,9 @@ class AreaService(
         method: PointInclusionMethod,
     ): List<Boolean>? {
         val area = areaRepository.findById(areaId)
-        return area?.checkMultiplePointsInsideArea(points, pointInclusionStrategies[method]!!)
+        val pointInclusionStrategy = pointInclusionStrategies[method]
+            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        return area?.checkMultiplePointsInsideArea(points, pointInclusionStrategy)
     }
 
     fun save(area: Area): Area {
