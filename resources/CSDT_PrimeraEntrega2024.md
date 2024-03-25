@@ -21,7 +21,7 @@ embargo
 este análisis no representa el estado del proyecto, puesto que omite aspectos tales como la arquitectura del código y
 bugs en la lógica.
 
-Tal y como se encontró en [Etapa3-testing-debt.md](Etapa3-testing-debt.md) algunos métodos que son cruciales en los
+Tal y como se encontró en [Etapa3-testing-debt.md](Etapa3-testing-debt.md#casos-de-crossing-number-) algunos métodos que son cruciales en los
 distintos módulos
 no cumplían ni con los casos de prueba más simples. Otro ejemplo de bug no detectado por la herramienta se muestra en la
 siguiente imagen:
@@ -34,7 +34,7 @@ Así como casos en los que el código repetido no fue reportado en el análisis:
 
 Finalmente otros aspectos que no se tienen en cuenta por este análisis es el cumplimiento de estándares de código limpio
 como YAGNI,KISS y SOLID, el análisis del proyecto con respecto a estos principios se encuentra
-en [Etapa2-clean-code-y-XP.md](Etapa2-clean-code-y-XP.md)
+en [Etapa2-clean-code-y-XP.md](Etapa2-clean-code-y-XP.md#principios-de-clean-code)
 
 ## Estado actual
 
