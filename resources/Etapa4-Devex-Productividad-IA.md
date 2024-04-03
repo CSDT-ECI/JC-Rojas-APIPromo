@@ -64,7 +64,7 @@ solo la información del archivo actual, como utilizando información de otros a
 ![docFromAnotherFileInformation.png](img%2Fdevex-ia%2FdocFromAnotherFileInformation.png)
 Adicionalmente se observa que es capaz de sugerir parrafos completos de documentación tal y como se observa en el siguiente video:
 
-video aqui replaceme
+https://github.com/CSDT-ECI/JC-Rojas-APIPromo/assets/45981880/cabf5fa3-8009-4294-8f0c-41428a46e2b7
 
 Sin embargo, la herramienta no es capaz de sugerir información coherente en todos los casos, y tiende a repetir información,
 adicionalmente considero que si bien muchas veces aporta como un guía para la documentación, es necesaria la intervención
