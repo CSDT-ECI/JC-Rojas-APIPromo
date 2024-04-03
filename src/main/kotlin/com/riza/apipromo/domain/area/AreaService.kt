@@ -15,8 +15,9 @@ class AreaService(
         method: PointInclusionMethod,
     ): Boolean? {
         val area = areaRepository.findById(areaId)
-        val pointInclusionStrategy = pointInclusionStrategies[method]
-            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        val pointInclusionStrategy =
+            pointInclusionStrategies[method]
+                ?: throw NotImplementedException("Selected method is not implemented in the system")
         return area?.checkPointInsideArea(point, pointInclusionStrategy)
     }
 
@@ -26,8 +27,9 @@ class AreaService(
         method: PointInclusionMethod,
     ): List<Boolean>? {
         val area = areaRepository.findById(areaId)
-        val pointInclusionStrategy = pointInclusionStrategies[method]
-            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        val pointInclusionStrategy =
+            pointInclusionStrategies[method]
+                ?: throw NotImplementedException("Selected method is not implemented in the system")
         return area?.checkMultiplePointsInsideArea(points, pointInclusionStrategy)
     }
 

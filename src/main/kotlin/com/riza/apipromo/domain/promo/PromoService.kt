@@ -26,8 +26,9 @@ class PromoService(
         val areas = areaRepository.findAllById(areaIds)
         val users = userRepository.findAll()
         promo.areas = areas.toMutableSet()
-        val pointInclusionStrategy = pointInclusionStrategies[method]
-            ?: throw ExecutionControl.NotImplementedException("Selected method is not implemented in the system")
+        val pointInclusionStrategy =
+            pointInclusionStrategies[method]
+                ?: throw ExecutionControl.NotImplementedException("Selected method is not implemented in the system")
         promo.calculateBenefitedUsers(users, areas, pointInclusionStrategy, objectMapper)
 
         return promoRepository.save(promo)
