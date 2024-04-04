@@ -69,3 +69,27 @@ https://github.com/CSDT-ECI/JC-Rojas-APIPromo/assets/45981880/cabf5fa3-8009-4294
 Sin embargo, la herramienta no es capaz de sugerir información coherente en todos los casos, y tiende a repetir información,
 adicionalmente considero que si bien muchas veces aporta como un guía para la documentación, es necesaria la intervención
 humana para asegurar que la información es correcta y se estructura de forma adecuada.
+
+### Generación de pruebas unitarias con Github Copilot
+Se utilizó Github Copilot para generar pruebas unitarias para el `userService`, después de realizar varios 
+experimentos se encontraron resultados satisfactorios, la herramienta es capaz de sugerir pruebas unitarias coherentes
+y relevantes. Para lograr esto fue necesario añadir las clases implicadas y especificar un prompt para que la herramienta generara mejores
+pruebas unitarias, tal y como se observa en el siguiente video y en las siguientes imágenes. Sin embargo, la respuesta inicial
+solo incluye los casos felices, por lo que es necesario añadir casos de borde y casos de error para tener una cobertura,
+estos casos se pueden generar a partir de prompts adicionales en la misma conversación.
+#### Uso de Github Copilot para generar pruebas unitarias
+Video aqui replaceme
+#### Ejemplo de estructura de las pruebas generadas
+![testStructureExample.png](img%2Fdevex-ia%2FtestStructureExample.png)
+#### Reporte de ejecución de las pruebas generadas
+![generatedTests.png](img%2Fdevex-ia%2FgeneratedTests.png)
+#### Casos borde y casos de error sugeridos
+![proposedEdgeCases.png](img%2Fdevex-ia%2FproposedEdgeCases.png)
+
+En general, la herramienta es capaz de sugerir pruebas unitarias coherentes y relevantes, sin embargo, es necesario
+que el desarrollador tenga un conocimiento previo de las clases implicadas y que evalue la tanto la calidad como la utilidad de las pruebas generadas
+puesto que en ocasiones no cumplen con los estándares de calidad del proyecto, o son pruebas de funcionalidades 
+que no existen y que no son relevantes para el proyecto.
+
+Algunas veces las pruebas generadas requieren de intervención del desarrollador para poblamiento de datos o para
+ajustar los casos de prueba.
