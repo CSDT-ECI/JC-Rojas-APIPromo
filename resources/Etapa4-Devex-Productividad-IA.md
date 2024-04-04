@@ -78,7 +78,7 @@ pruebas unitarias, tal y como se observa en el siguiente video y en las siguient
 solo incluye los casos felices, por lo que es necesario añadir casos de borde y casos de error para tener una cobertura,
 estos casos se pueden generar a partir de prompts adicionales en la misma conversación.
 #### Uso de Github Copilot para generar pruebas unitarias
-Video aqui replaceme
+https://github.com/CSDT-ECI/JC-Rojas-APIPromo/assets/45981880/f62dfcf6-479b-4353-a849-e077f3a62d2b
 #### Ejemplo de estructura de las pruebas generadas
 ![testStructureExample.png](img%2Fdevex-ia%2FtestStructureExample.png)
 #### Reporte de ejecución de las pruebas generadas
