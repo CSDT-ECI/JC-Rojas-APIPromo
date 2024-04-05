@@ -53,7 +53,7 @@
   del proyecto y facilitar el onboarding de nuevos desarrolladores.
 ## Uso de IA
 Se experimentó utilizando Github Copilot y el plugin disponible para IntelliJ IDEA, se realizaron experimentos para generar
-documentación (la escritura de este documento) y la generación de pruebas unitarias
+documentación (la escritura de este documento), la generación de pruebas unitarias y sugerencias de refactorización.
 ### Generación de documentación con Github Copilot
 Se utilizó Github Copilot para generar la documentación de este documento, se observaron distintos comportamientos,
 la herramienta es capaz de sugerir información coherente y relevante a partir del texto previo utilizando, tanto utilizando
@@ -93,3 +93,17 @@ que no existen y que no son relevantes para el proyecto.
 
 Algunas veces las pruebas generadas requieren de intervención del desarrollador para poblamiento de datos o para
 ajustar los casos de prueba.
+### Sugerencias de refactorización
+Se utilizó Github Copilot para generar sugerencias de refactorización para `UserLocation`
+al incluir el contexto necesario la herramienta sugirió el siguiente refactor para la clase `UserLocation`:
+![suggestedRefactor1.png](img%2Fdevex-ia%2FsuggestedRefactor1.png)
+![suggestedRefactor2.png](img%2Fdevex-ia%2FsuggestedRefactor2.png)
+Esta sugerencia reduce la complejidad generada por la clase `UserLocation` y facilita la manipulación del código.
+Otra sugerencia de refactorización que se obtuvo al especificar que se deseaba un cambio de diseño para poder manejar casos más generales
+fue la siguiente: 
+![suggestedRedesign.png](img%2Fdevex-ia%2FsuggestedRedesign.png)
+### Conclusiones
+En general considero que las sugerencias de la herramienta son útiles para guiar al desarrollador en las distintas
+tareas que se realizan en el desarrollo de software, sin embargo, es necesario que el desarrollador tenga un conocimiento
+para evaluar las respuestas que mejor se ajusten al proyecto y adaptarlas si es necesario, además de poder enriquecer las
+interacciones con la herramienta para obtener mejores sugerencias.
