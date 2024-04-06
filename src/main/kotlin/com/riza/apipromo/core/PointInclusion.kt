@@ -2,29 +2,9 @@ package com.riza.apipromo.core
 
 class PointInclusion {
 
-    private val polygons by lazy { arrayListOf<Polygon>() }
-
-    fun setDataSet(data: List<Polygon>) {
-        polygons.clear()
-        polygons.addAll(data)
-    }
-
-
     /*
     CROSSING NUMBER
      */
-
-    fun findPolygonSurroundingByCN(p: Point): ArrayList<Polygon> {
-
-        val result = arrayListOf<Polygon>()
-
-        polygons.forEach {
-            if (analyzePointByCN(it, p)) result.add(it)
-        }
-
-        return result
-
-    }
 
     fun analyzePointByCN(poly: Polygon, p: Point): Boolean {
 
@@ -74,18 +54,6 @@ class PointInclusion {
     /*
     WINDING NUMBER
      */
-
-    fun findPolygonSurroundingByWN(p: Point): ArrayList<Polygon> {
-
-        val result = arrayListOf<Polygon>()
-
-        polygons.forEach {
-            if (analyzePointByWN(it, p)) result.add(it)
-        }
-
-        return result
-
-    }
 
     fun analyzePointByWN(poly: Polygon, p: Point): Boolean {
 
