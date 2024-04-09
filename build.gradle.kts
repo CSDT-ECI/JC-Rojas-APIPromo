@@ -47,8 +47,8 @@ dependencies {
 
 sonar {
     properties {
-        property("sonar.projectKey", "temp")
-        property("sonar.organization", "temp")
+        property("sonar.projectKey", "jcro15testingorg_csdt-project")
+        property("sonar.organization", "jcro15testingorg")
         property("sonar.host.url", "https://sonarcloud.io")
     }
 }
@@ -60,7 +60,7 @@ tasks.jacocoTestReport {
 }
 
 tasks.withType<SonarTask> {
-    dependsOn(tasks.named("test"))
+    dependsOn(tasks.named("check"))
     dependsOn(tasks.named("jacocoTestReport"))
 }
 
