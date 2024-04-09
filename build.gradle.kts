@@ -1,3 +1,5 @@
+import org.sonarqube.gradle.SonarTask
+
 group = "com.riza"
 version = "0.0.1-SNAPSHOT"
 description = "APIPromo"
@@ -14,7 +16,7 @@ plugins {
     kotlin("plugin.serialization") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("io.spring.dependency-management") version "1.1.4"
-    id("org.springframework.boot") version "3.2.3"
+    id("org.springframework.boot") version "3.2.4"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("org.sonarqube") version "5.0.0.4638"
     id("jacoco")
@@ -60,7 +62,7 @@ tasks.named("check") {
     dependsOn(tasks.named("ktlintCheck"))
 }
 
-tasks.named("sonar") {
+tasks.withType<SonarTask> {
     dependsOn(tasks.named("check"))
     dependsOn(tasks.named("jacocoTestReport"))
 }
