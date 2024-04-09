@@ -58,6 +58,9 @@ tasks.jacocoTestReport {
         xml.required.set(true)
     }
 }
+tasks.named("check") {
+    dependsOn(tasks.named("ktlintCheck"))
+}
 
 tasks.withType<SonarTask> {
     dependsOn(tasks.named("check"))
