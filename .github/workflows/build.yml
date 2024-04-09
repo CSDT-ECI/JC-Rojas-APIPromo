@@ -13,14 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: PR Auto Describe
-        uses: salehhashemi1992/pr-auto-describe@main
-        with:
-          github-token: ${{ secrets.TOKEN }}
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          openai-model: 'gpt-4' # Optional, you can use 'gpt-3.5-turbo' or 'gpt-4-32k' as well.
-          github-api-base-url: 'https://api.github.com' # Optional, defaults to 'https://api.github.com'
-      - name: Set up JDK 17
+     - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
