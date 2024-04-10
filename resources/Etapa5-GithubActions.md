@@ -16,8 +16,11 @@ Adicionalmente se proponen las siguientes etapas
 - Análisis de seguridad del proyecto (snyk)
 
 ## Detalles de la implementación y resultados
-Se utiliza `gradle` para administrar el ciclo de vida del proyecto y las etapas de build, test, sonar y ktlintCheck,
-se realizan las siguiente configuraciones sobre el proyecto de gradle para agrupar algunas de las tareas.
+Para la implementación del pipeline se utilizó github actions, el pipeline construído se define en el archivo [build.yml](..%2F.github%2Fworkflows%2Fbuild.yml).
+A continuación se describe la implementación de las distintas etapas del pipeline
+
+Se utiliza `gradle` para administrar el ciclo de vida del proyecto y la ejecución de distintas tareas sobre este como por ejemplo
+build, test, sonar y ktlintCheck . Con el objetivo de agrupar algunas de las tareas Se realizan las siguiente configuraciones sobre el proyecto de gradle:
 
 ```kotlin
 tasks.named("check") {
@@ -31,8 +34,8 @@ tasks.withType<SonarTask> {
 ```
 
 Teniendo en cuenta que la fase de check construye el proyecto y ejecuta las pruebas, ahora adicionalmente 
-analizará los estándares de estilo. De esta forma basta con utilizar la fase `sonar` para cumplir con
-todas las etapas planteadas para el pipeline
+analizará los estándares de estilo. Adicionalmente, de esta forma basta con utilizar la fase `sonar` para cumplir con
+las etapas de build, test, sonar y ktlintCheck
 
 El análisis de sonar inicial obtuvo el siguiente resultado:
 
