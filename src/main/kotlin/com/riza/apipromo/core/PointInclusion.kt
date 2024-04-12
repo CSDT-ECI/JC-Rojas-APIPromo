@@ -1,13 +1,14 @@
 package com.riza.apipromo.core
 
 class PointInclusion {
-
     /*
     CROSSING NUMBER
      */
 
-    fun analyzePointByCN(poly: Polygon, p: Point): Boolean {
-
+    fun analyzePointByCN(
+        poly: Polygon,
+        p: Point,
+    ): Boolean {
         val boundingBox = BoundingBox(poly)
 
         if (boundingBox.isInside(p)) {
@@ -17,46 +18,62 @@ class PointInclusion {
         } else {
             return false
         }
-
     }
 
-    private fun countCN(poly: Polygon, p: Point): Int {
+    private fun countCN(
+        poly: Polygon,
+        point: Point,
+    ): Int {
+        var crossings = 0
 
-        var cn = 0
+        val points = poly.points
 
-        val V = poly.points
-        val n = V.size - 1
-
-        for (i in 0 until n) {
-
-            if (V[i].x == V[i + 1].x) continue //rule 3
+        for (i in 0 until points.size - 1) {
+            val edgeStart = points[i]
+            val edgeEnd = points[i + 1]
 
             if (
-                (V[i].y <= p.y && V[i + 1].y > p.y)  // rule1
-                ||
-                (V[i].y > p.y && V[i + 1].y <= p.y) // rule 2
+                isPointBetweenYEdgesCoordinates(point, edgeStart, edgeEnd) && isPointOnLeftOfEdges(point, edgeStart, edgeEnd)
             ) {
-                val ray = (p.y - V[i].y) / (V[i + 1].y - V[i].y)
-
-                if (p.x < V[i].x + ray * (V[i + 1].x - V[i].x)) {
-                    ++cn
+                val xIntersection = calculateXIntersection(point, edgeStart, edgeEnd)
+                if (point.x < xIntersection) {
+                    ++crossings
                 }
-
             }
-
         }
 
-        return cn
-
+        return crossings
     }
 
+    private fun isPointOnLeftOfEdges(
+        point: Point,
+        edgeStart: Point,
+        edgeEnd: Point,
+    ) = point.x <= edgeStart.x && point.x <= edgeEnd.x
+
+    private fun isPointBetweenYEdgesCoordinates(
+        point: Point,
+        edgeStart: Point,
+        edgeEnd: Point,
+    ) = (edgeStart.y <= point.y && edgeEnd.y > point.y) || (edgeStart.y > point.y && edgeEnd.y <= point.y)
+
+    private fun calculateXIntersection(
+        point: Point,
+        edgeStart: Point,
+        edgeEnd: Point,
+    ): Double {
+        val projection = (point.y - edgeStart.y) / (edgeEnd.y - edgeStart.y)
+        return edgeStart.x + projection * (edgeEnd.x - edgeStart.x)
+    }
 
     /*
     WINDING NUMBER
      */
 
-    fun analyzePointByWN(poly: Polygon, p: Point): Boolean {
-
+    fun analyzePointByWN(
+        poly: Polygon,
+        p: Point,
+    ): Boolean {
         val boundingBox = BoundingBox(poly)
 
         if (boundingBox.isInside(p)) {
@@ -68,36 +85,46 @@ class PointInclusion {
         }
     }
 
-    private fun countWN(poly: Polygon, p: Point): Int {
-
+    private fun countWN(
+        poly: Polygon,
+        point: Point,
+    ): Int {
         var wn = 0
 
-        val v = poly.points
-        val n = v.size - 1
+        val points = poly.points
 
-        for (i in 0 until n) {
+        for (i in 0 until points.size - 1) {
+            val edgeStart = points[i]
+            val edgeEnd = points[i + 1]
 
-            if (v[i].x == v[i + 1].x) continue //rule 3
-
-            if(v[i].y<=p.y){
-
-                if(v[i+1].y > p.y)
-                    if(isLeft(v[i], v[i+1], p)) ++wn
-
-            }else{
-                if(v[i+1].y <= p.y)
-                    if(!isLeft(v[i], v[i+1], p)) --wn
-            }
-
+            wn += calculateCrossingValueForEdge(edgeStart, edgeEnd, point)
         }
 
         return wn
-
     }
 
-    private fun isLeft(p0: Point, p1: Point, p2: Point): Boolean {
-        val n = (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)
-        return (n > 0)
+    private fun calculateCrossingValueForEdge(
+        edgeStart: Point,
+        edgeEnd: Point,
+        point: Point,
+    ): Int {
+        if (edgeStart.y <= point.y) {
+            if (edgeEnd.y > point.y) {
+                if (checkPointPositionAgainstLine(edgeStart, edgeEnd, point) > 0) return 1
+            }
+        } else {
+            if (edgeEnd.y <= point.y) {
+                if (checkPointPositionAgainstLine(edgeStart, edgeEnd, point) < 0) return -1
+            }
+        }
+        return 0
     }
 
+    private fun checkPointPositionAgainstLine(
+        edgeStart: Point,
+        edgeEnd: Point,
+        point: Point,
+    ): Double {
+        return (edgeEnd.x - edgeStart.x) * (point.y - edgeStart.y) - (point.x - edgeStart.x) * (edgeEnd.y - edgeStart.y)
+    }
 }

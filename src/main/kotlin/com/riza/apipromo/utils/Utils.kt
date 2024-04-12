@@ -7,12 +7,14 @@ import com.riza.apipromo.core.Polygon
 import com.riza.apipromo.feature.area.models.AreaDTO
 
 object Utils {
-
-    fun area2Polygon(areaDTO: AreaDTO, objectMapper: ObjectMapper): Polygon {
+    fun area2Polygon(
+        areaDTO: AreaDTO,
+        objectMapper: ObjectMapper,
+    ): Polygon {
         val points = objectMapper.readValue<List<Point>>(areaDTO.points)
         return Polygon(
-                areaDTO.name,
-                ArrayList(points)
+            areaDTO.name,
+            ArrayList(points),
         )
     }
 }
