@@ -82,5 +82,7 @@ de dichas localizaciones.
 
 La reducción de complejidad de evidencia en los métodos de updateLocation y calculateLocationsAsPoints, tal y como se muestra
 a continuación:
+
 ![refactorUserLocation.png](img/architecture-debt/refactorUserLocation.png)
+
 ![refactorUserLocation2.png](img/architecture-debt/refactorUserLocation2.png)
