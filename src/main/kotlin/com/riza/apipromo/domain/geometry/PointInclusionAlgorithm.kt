@@ -1,7 +1,4 @@
-package com.riza.apipromo.domain
-
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
+package com.riza.apipromo.domain.geometry
 
 interface PointInclusionAlgorithm {
     fun isPointInsidePolygon(

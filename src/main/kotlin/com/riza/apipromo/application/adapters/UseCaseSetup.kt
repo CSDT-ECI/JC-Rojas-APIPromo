@@ -1,10 +1,12 @@
 package com.riza.apipromo.application.adapters
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.domain.*
 import com.riza.apipromo.domain.area.AreaRepository
 import com.riza.apipromo.domain.area.AreaService
+import com.riza.apipromo.domain.geometry.CrossingNumberAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
+import com.riza.apipromo.domain.geometry.WindingNumberAlgorithm
 import com.riza.apipromo.domain.promo.PromoRepository
 import com.riza.apipromo.domain.promo.PromoService
 import com.riza.apipromo.domain.user.UserRepository
@@ -43,9 +45,8 @@ class UseCaseSetup {
         userRepository: UserRepository,
         areaRepository: AreaRepository,
         pointInclusionStrategies: List<Pair<PointInclusionMethod, PointInclusionAlgorithm>>,
-        objectMapper: ObjectMapper,
     ): PromoService {
-        return PromoService(promoRepository, areaRepository, userRepository, pointInclusionStrategies.toMap(), objectMapper)
+        return PromoService(promoRepository, areaRepository, userRepository, pointInclusionStrategies.toMap())
     }
 
     @Bean

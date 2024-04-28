@@ -1,10 +1,9 @@
 package com.riza.apipromo.domain.promo
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.riza.apipromo.domain.PointInclusionAlgorithm
+import com.riza.apipromo.application.adapters.controller.requests.PromoType
 import com.riza.apipromo.domain.area.Area
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
 import com.riza.apipromo.domain.user.User
-import com.riza.apipromo.feature.promo.models.PromoType
 import java.util.*
 
 data class Promo(
@@ -24,10 +23,9 @@ data class Promo(
         allUsers: List<User>,
         areas: List<Area>,
         pointInclusionAlgorithm: PointInclusionAlgorithm,
-        objectMapper: ObjectMapper,
     ) {
         allUsers.forEach { user: User ->
-            val locations = user.calculateLocationsAsPoints(objectMapper)
+            val locations = user.calculateLocationsAsPoints()
             for (area in areas) {
                 if (area.checkMinimumPointsInsideArea(locations, pointInclusionAlgorithm, threshold)) {
                     users.add(user)

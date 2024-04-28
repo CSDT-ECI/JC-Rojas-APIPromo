@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.riza.apipromo.application.adapters.repository.jpa.promo.PromoEntity
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
 import com.riza.apipromo.domain.area.Area
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.Polygon
 import jakarta.persistence.*
 
 @Entity(name = "area")

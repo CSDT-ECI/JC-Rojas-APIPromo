@@ -1,25 +1,25 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.riza.apipromo.base.BaseResponse
-import com.riza.apipromo.core.PointInclusionMethod
+import com.riza.apipromo.application.adapters.controller.error.BadRequestException
+import com.riza.apipromo.application.adapters.controller.requests.AddPromoRequest
+import com.riza.apipromo.application.adapters.controller.responses.BaseResponse
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import com.riza.apipromo.domain.promo.Promo
 import com.riza.apipromo.domain.promo.PromoService
-import com.riza.apipromo.error.BadRequestException
-import com.riza.apipromo.feature.promo.models.AddPromoRequest
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @Controller
-@RequestMapping(path = ["promo"])
+@RequestMapping(path = ["promos"])
 class PromoController(
     private val promoService: PromoService,
 ) {
     val defaultAlgorithm = PointInclusionMethod.CN
 
-    @PostMapping("add")
+    @PostMapping
     @ResponseBody
-    fun addPromo(
+    fun createPromo(
         @RequestBody promoRequest: AddPromoRequest,
     ): BaseResponse<Promo> {
         if (promoRequest.areaIds.isEmpty()) {
@@ -44,9 +44,9 @@ class PromoController(
         )
     }
 
-    @GetMapping("all")
+    @GetMapping
     @ResponseBody
-    fun getAllPromo(): BaseResponse<Iterable<Promo>> {
+    fun getAllPromos(): BaseResponse<Iterable<Promo>> {
         var result: Iterable<Promo>? = null
         validate {
             result = promoService.findAll()

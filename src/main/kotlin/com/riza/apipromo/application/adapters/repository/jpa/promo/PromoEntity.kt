@@ -2,10 +2,10 @@ package com.riza.apipromo.application.adapters.repository.jpa.promo
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.riza.apipromo.application.adapters.controller.requests.PromoType
 import com.riza.apipromo.application.adapters.repository.jpa.area.AreaEntity
 import com.riza.apipromo.application.adapters.repository.jpa.user.UserEntity
 import com.riza.apipromo.domain.promo.Promo
-import com.riza.apipromo.feature.promo.models.PromoType
 import jakarta.persistence.*
 import java.util.*
 

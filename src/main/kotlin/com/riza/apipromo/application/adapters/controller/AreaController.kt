@@ -1,30 +1,24 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.riza.apipromo.base.BaseResponse
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.core.Polygon
+import com.riza.apipromo.application.adapters.controller.error.BadRequestException
+import com.riza.apipromo.application.adapters.controller.requests.AreaRequest
+import com.riza.apipromo.application.adapters.controller.requests.CheckManyPointRequest
+import com.riza.apipromo.application.adapters.controller.requests.CheckPointRequest
+import com.riza.apipromo.application.adapters.controller.responses.BaseResponse
 import com.riza.apipromo.domain.area.Area
 import com.riza.apipromo.domain.area.AreaService
-import com.riza.apipromo.error.BadRequestException
-import com.riza.apipromo.feature.area.models.*
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
+import com.riza.apipromo.domain.geometry.Polygon
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(path = ["area"])
+@RequestMapping(path = ["areas"])
 class AreaController(
     private val areaService: AreaService,
 ) {
-    @GetMapping("test")
+    @PostMapping
     @ResponseBody
-    fun test(): BaseResponse<String> {
-        return BaseResponse<String>().apply {
-            data = "Hello World!"
-        }
-    }
-
-    @PostMapping("add")
-    @ResponseBody
-    fun add(
+    fun createArea(
         @RequestBody body: AreaRequest,
     ): BaseResponse<Area> {
         val area =
@@ -41,60 +35,62 @@ class AreaController(
         )
     }
 
-    @GetMapping("all")
+    @GetMapping
     @ResponseBody
-    fun all(): BaseResponse<Iterable<Area>> {
+    fun getAllAreas(): BaseResponse<Iterable<Area>> {
         return BaseResponse(
             message = "semua area",
             data = areaService.findAll(),
         )
     }
 
-    @PostMapping("delete")
+    @DeleteMapping("{id}")
     @ResponseBody
-    fun delete(
-        @RequestBody body: IdOnlyRequest,
+    fun deleteAreaById(
+        @PathVariable("id") id: Long,
     ): BaseResponse<Area> {
-        areaService.deleteById(body.id)
+        areaService.deleteById(id)
 
         return BaseResponse(
             "Berhasil menghapus",
         )
     }
 
-    @PostMapping("check/{method}")
+    @PostMapping("{areaId}/check/{method}")
     @ResponseBody
-    fun check(
-        @RequestBody body: CheckPointRequest,
+    fun checkPointInArea(
+        @PathVariable("areaId") areaId: Long,
         @PathVariable("method") method: PointInclusionMethod,
+        @RequestBody body: CheckPointRequest,
     ): BaseResponse<Boolean> {
         val result = BaseResponse<Boolean>()
-        val isInside = areaService.checkPointInArea(body.areaId, body.point, method)
+        val isInside = areaService.checkPointInArea(areaId, body.point, method)
 
         if (isInside != null) {
             result.data = isInside
             result.message = if (isInside) "Point di dalam" else "Point di luar"
         } else {
-            throw BadRequestException("Area id ${body.areaId} Tidak ditemukan")
+            throw BadRequestException("Area id $areaId Tidak ditemukan")
         }
 
         return result
     }
 
-    @PostMapping("checkall/{method}")
+    @PostMapping("{areaId}/checkall/{method}")
     @ResponseBody
-    fun checkAll(
-        @RequestBody body: CheckManyPointRequest,
+    fun checkAllPointsInArea(
+        @PathVariable("areaId") areaId: Long,
         @PathVariable("method") method: PointInclusionMethod,
+        @RequestBody body: CheckManyPointRequest,
     ): BaseResponse<List<Boolean>> {
         val response = BaseResponse<List<Boolean>>()
 
-        val result = areaService.checkAllPointsInArea(body.areaId, body.points, method)
+        val result = areaService.checkAllPointsInArea(areaId, body.points, method)
         if (result != null) {
             response.message = "Berhasil menganalisa points"
             response.data = result
         } else {
-            throw BadRequestException("Area id ${body.areaId} Tidak ditemukan")
+            throw BadRequestException("Area id $areaId Tidak ditemukan")
         }
         return response
     }

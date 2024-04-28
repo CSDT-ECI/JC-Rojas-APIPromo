@@ -1,4 +1,4 @@
-package com.riza.apipromo.base
+package com.riza.apipromo.application.adapters.controller.responses
 
 data class BaseResponse<T>(
     var message: String? = "Success",

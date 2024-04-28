@@ -65,7 +65,7 @@ class UserServiceTests {
         `when`(userRepository.findById(1)).thenReturn(testUser)
         `when`(userRepository.save(any<User>())).thenReturn(expectedUser)
 
-        val result = userService.editUserFcmId(1, "newFcmId")
+        val result = userService.patchUser(1, "newFcmId")
 
         Assertions.assertEquals(result?.fcmId, "newFcmId")
         verify(userRepository, times(1)).save(any<User>())
@@ -87,7 +87,7 @@ class UserServiceTests {
     @Test
     fun editUserFcmIdShouldReturnNullWhenUserDoesNotExist() {
         `when`(userRepository.findById(999)).thenReturn(null)
-        val result = userService.editUserFcmId(999, "newFcmId")
+        val result = userService.patchUser(999, "newFcmId")
         Assertions.assertNull(result)
     }
 }

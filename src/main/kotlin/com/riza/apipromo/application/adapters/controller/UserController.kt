@@ -1,25 +1,24 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.riza.apipromo.base.BaseResponse
-import com.riza.apipromo.core.Point
+import com.riza.apipromo.application.adapters.controller.error.BadRequestException
+import com.riza.apipromo.application.adapters.controller.requests.CreateUserRequest
+import com.riza.apipromo.application.adapters.controller.requests.PatchUserRequest
+import com.riza.apipromo.application.adapters.controller.requests.UpdateLocationRequest
+import com.riza.apipromo.application.adapters.controller.responses.BaseResponse
+import com.riza.apipromo.domain.WeekDay
 import com.riza.apipromo.domain.user.User
 import com.riza.apipromo.domain.user.UserService
-import com.riza.apipromo.error.BadRequestException
-import com.riza.apipromo.feature.user.models.*
 import org.springframework.web.bind.annotation.*
-import riza.com.cto.core.PolygonUtils
 
 @RestController
-@RequestMapping(path = ["user", "users"])
+@RequestMapping(path = ["users"])
 class UserController(
     private val userService: UserService,
-    private val objectMapper: ObjectMapper,
 ) {
-    @PostMapping("add")
+    @PostMapping
     @ResponseBody
-    fun addUser(
-        @RequestBody request: AddUserRequest,
+    fun createUser(
+        @RequestBody request: CreateUserRequest,
     ): BaseResponse<User> {
         val user =
             userService.save(
@@ -31,21 +30,22 @@ class UserController(
         )
     }
 
-    @GetMapping("all")
+    @GetMapping
     @ResponseBody
-    fun allUser(): BaseResponse<Iterable<User>> {
+    fun getAllUsers(): BaseResponse<Iterable<User>> {
         val users = userService.findAll()
         return BaseResponse(
             data = users,
         )
     }
 
-    @PostMapping("edit-fcm")
+    @PatchMapping("{userId}")
     @ResponseBody
-    fun editFCM(
-        @RequestBody request: EditFCMRequest,
+    fun patchUser(
+        @PathVariable("userId") userId: Long,
+        @RequestBody request: PatchUserRequest,
     ): BaseResponse<User> {
-        val user = userService.editUserFcmId(request.idUser, request.fcm)
+        val user = userService.patchUser(userId, request.fcm)
         val response = BaseResponse<User>()
         if (user != null) {
             response.data = user
@@ -55,13 +55,13 @@ class UserController(
         return response
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{userId}")
     @ResponseBody
-    fun getUser(
-        @PathVariable("id") id: Long,
+    fun getUserById(
+        @PathVariable("userId") userId: Long,
     ): BaseResponse<User> {
         val res = BaseResponse<User>()
-        val user = userService.findById(id)
+        val user = userService.findById(userId)
         if (user != null) {
             res.data = user
         } else {
@@ -70,14 +70,15 @@ class UserController(
         return res
     }
 
-    @PostMapping("update-location")
+    @PutMapping("{userId}/locations/{day}")
     @ResponseBody
-    fun editLocation(
+    fun editLocationByDayAndUserId(
+        @PathVariable("userId") userId: Long,
+        @PathVariable("day") day: WeekDay,
         @RequestBody request: UpdateLocationRequest,
     ): BaseResponse<User> {
         val response = BaseResponse<User>()
-        val location = objectMapper.writeValueAsString(request.location)
-        val user = userService.editLocation(request.idUser, request.day, location)
+        val user = userService.editLocation(userId, day, request.location)
 
         if (user != null) {
             response.data = user
@@ -87,50 +88,9 @@ class UserController(
         return response
     }
 
-    @PostMapping("bulk-user-create")
+    @DeleteMapping
     @ResponseBody
-    fun bulkTestUser(
-        @RequestBody request: UserBulkRequest,
-    ): BaseResponse<String> {
-        request.users.forEach {
-            val mUser = User(name = it.name, promos = mutableSetOf())
-
-            val center =
-                PolygonUtils.generateRandomPointFrom(
-                    request.centroid,
-                    PolygonUtils.meterToDegree(1000.0),
-                )
-
-            mUser.locations.apply {
-                monday = getRandomLocation4Day(center, request.radius)
-                tuesday = getRandomLocation4Day(center, request.radius)
-                wednesday = getRandomLocation4Day(center, request.radius)
-                thursday = getRandomLocation4Day(center, request.radius)
-                friday = getRandomLocation4Day(center, request.radius)
-                saturday = getRandomLocation4Day(center, request.radius)
-                sunday = getRandomLocation4Day(center, request.radius)
-            }
-
-            userService.save(mUser)
-        }
-
-        return BaseResponse(data = "${request.users.size} Created!")
-    }
-
-    private fun getRandomLocation4Day(
-        centroid: Point,
-        radius: Double,
-    ) = objectMapper.writeValueAsString(
-        PolygonUtils.generateWalkPoints(
-            centroid,
-            radius,
-            24,
-        ),
-    )
-
-    @PostMapping("bulk-user-delete")
-    @ResponseBody
-    fun bulkDelete(): BaseResponse<Boolean> {
+    fun deleteAllUsers(): BaseResponse<Boolean> {
         userService.deleteAll()
         return BaseResponse(data = true)
     }

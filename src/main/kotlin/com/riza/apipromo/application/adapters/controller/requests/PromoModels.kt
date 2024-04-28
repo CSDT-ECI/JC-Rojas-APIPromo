@@ -1,4 +1,4 @@
-package com.riza.apipromo.feature.promo.models
+package com.riza.apipromo.application.adapters.controller.requests
 
 enum class PromoType {
     PERCENT,

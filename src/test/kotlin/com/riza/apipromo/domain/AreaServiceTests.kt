@@ -1,11 +1,12 @@
 package com.riza.apipromo.domain
 
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.core.Polygon
 import com.riza.apipromo.domain.area.Area
 import com.riza.apipromo.domain.area.AreaRepository
 import com.riza.apipromo.domain.area.AreaService
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
+import com.riza.apipromo.domain.geometry.Polygon
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -1,8 +1,5 @@
-package com.riza.apipromo.domain
+package com.riza.apipromo.domain.geometry
 
-import com.riza.apipromo.core.BoundingBox
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

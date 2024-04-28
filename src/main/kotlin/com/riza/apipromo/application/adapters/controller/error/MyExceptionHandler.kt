@@ -1,4 +1,4 @@
-package com.riza.apipromo.error
+package com.riza.apipromo.application.adapters.controller.error
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

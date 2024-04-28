@@ -1,19 +1,13 @@
-package com.riza.apipromo.feature.area.models
+package com.riza.apipromo.application.adapters.controller.requests
 
-import com.riza.apipromo.core.Point
-
-data class IdOnlyRequest(
-    val id: Long = 0L,
-)
+import com.riza.apipromo.domain.geometry.Point
 
 data class CheckPointRequest(
     val point: Point = Point(),
-    val areaId: Long = 0L,
 )
 
 data class CheckManyPointRequest(
     val points: List<Point> = emptyList(),
-    val areaId: Long = 0L,
 )
 
 data class AreaRequest(

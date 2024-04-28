@@ -1,4 +1,4 @@
-package com.riza.apipromo.core
+package com.riza.apipromo.domain.geometry
 
 data class Point(
     val x: Double = 0.0,

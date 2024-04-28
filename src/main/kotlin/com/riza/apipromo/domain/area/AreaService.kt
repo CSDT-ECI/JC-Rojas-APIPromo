@@ -1,8 +1,8 @@
 package com.riza.apipromo.domain.area
 
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.domain.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import jdk.jshell.spi.ExecutionControl.NotImplementedException
 
 class AreaService(
