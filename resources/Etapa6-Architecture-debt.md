@@ -71,5 +71,16 @@ cuenta la ubicación de un usuario en los ultimos 15 días, no sería posible.
 Cómo propuesta de mejora se plantea la creación de una tabla de ubicaciones que permita almacenar la ubicación de un usuario
 asociada a una fecha, de forma que se pueda almacenar la ubicación de un usuario en cualquier fecha y no solo en los días de la semana.
 
-Este ajuste no fue implementado en la refactorización realizada, pero se propone como una mejora futura a la aplicación, en caso que 
+Si bien este ajuste no fue implementado, se propone como una mejora futura a la aplicación, en caso que 
 las necesidades del negocio demanden otro tipo de funcionalidades.
+
+Dado que no se realizó el cambio de enfoque de UserLocation, se realizó una refactorización para facilitar el manejo de
+las localizaciones dentro del proyecto, se pasa de crear una columna por cada dia de la semana y de tener un objeto 
+con un atributo por cada día a usar un EnumMap y un Enum para manejar los días de la semana, en la base de datos se almacena
+como una sola columna con el JSON del mapa utilizado, esto reduce la complejidad del código y facilita la manipulación segura
+de dichas localizaciones.
+
+La reducción de complejidad de evidencia en los métodos de updateLocation y calculateLocationsAsPoints, tal y como se muestra
+a continuación:
+![refactorUserLocation.png](img/architecture-debt/refactorUserLocation.png)
+![refactorUserLocation2.png](img/architecture-debt/refactorUserLocation2.png)
