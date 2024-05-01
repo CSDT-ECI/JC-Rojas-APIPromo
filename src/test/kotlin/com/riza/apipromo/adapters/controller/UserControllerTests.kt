@@ -14,18 +14,14 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.doNothing
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import java.util.*
 
-@SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTests {
-    @Autowired
     lateinit var mockMvc: MockMvc
 
     val objectMapper: ObjectMapper = ObjectMapper()
