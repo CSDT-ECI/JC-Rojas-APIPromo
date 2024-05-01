@@ -1,8 +1,8 @@
 package com.riza.apipromo.domain
 
-import com.riza.apipromo.core.BoundingBox
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
+import com.riza.apipromo.domain.geometry.BoundingBox
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.Polygon
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource

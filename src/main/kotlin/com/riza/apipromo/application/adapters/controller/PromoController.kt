@@ -1,64 +1,43 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.riza.apipromo.base.BaseResponse
-import com.riza.apipromo.core.PointInclusionMethod
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import com.riza.apipromo.domain.promo.Promo
 import com.riza.apipromo.domain.promo.PromoService
-import com.riza.apipromo.error.BadRequestException
-import com.riza.apipromo.feature.promo.models.AddPromoRequest
+import com.riza.apipromo.domain.promo.PromoType
+import com.riza.apipromo.v1.PromosApi
+import com.riza.apipromo.v1.domain.AddPromoRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @Controller
-@RequestMapping(path = ["promo"])
 class PromoController(
     private val promoService: PromoService,
-) {
+) : PromosApi {
     val defaultAlgorithm = PointInclusionMethod.CN
 
-    @PostMapping("add")
-    @ResponseBody
-    fun addPromo(
-        @RequestBody promoRequest: AddPromoRequest,
-    ): BaseResponse<Promo> {
-        if (promoRequest.areaIds.isEmpty()) {
-            throw BadRequestException("Area ID Kosong")
-        }
+    override fun createPromo(addPromoRequest: AddPromoRequest): ResponseEntity<com.riza.apipromo.v1.domain.Promo> {
         val promo =
             Promo(
-                code = promoRequest.code,
-                startDate = Date(promoRequest.startDate),
-                endDate = Date(promoRequest.endDate),
-                type = promoRequest.type,
-                value = promoRequest.value,
-                service = promoRequest.service,
-                description = promoRequest.description,
+                code = addPromoRequest.code,
+                startDate = addPromoRequest.startDate.toLocalDateTime(),
+                endDate = addPromoRequest.endDate?.toLocalDateTime(),
+                type = PromoType.valueOf(addPromoRequest.type.value),
+                value = addPromoRequest.value,
+                service = addPromoRequest.service,
+                description = addPromoRequest.description,
                 areas = mutableSetOf(),
                 users = mutableSetOf(),
-                threshold = promoRequest.threshold,
+                threshold = addPromoRequest.threshold,
             )
-
-        return BaseResponse(
-            data = promoService.addPromo(promo, promoRequest.areaIds, defaultAlgorithm),
-        )
+        val createdPromo = promoService.addPromo(promo, addPromoRequest.areaIds, defaultAlgorithm)
+        return if (createdPromo != null) {
+            ResponseEntity.ok(createdPromo.convertToView())
+        } else {
+            ResponseEntity.badRequest().build()
+        }
     }
 
-    @GetMapping("all")
-    @ResponseBody
-    fun getAllPromo(): BaseResponse<Iterable<Promo>> {
-        var result: Iterable<Promo>? = null
-        validate {
-            result = promoService.findAll()
-        }
-        return BaseResponse(data = result)
-    }
-
-    private fun validate(action: () -> Unit) {
-        try {
-            action.invoke()
-        } catch (e: Exception) {
-            throw BadRequestException(e.message.toString())
-        }
+    override fun getAllPromos(): ResponseEntity<List<com.riza.apipromo.v1.domain.Promo>> {
+        return ResponseEntity.ok(promoService.findAll().map { it.convertToView() })
     }
 }

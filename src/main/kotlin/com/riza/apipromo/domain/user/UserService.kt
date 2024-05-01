@@ -1,5 +1,8 @@
 package com.riza.apipromo.domain.user
 
+import com.riza.apipromo.domain.WeekDay
+import com.riza.apipromo.domain.geometry.Point
+
 class UserService(
     private val userRepository: UserRepository,
 ) {
@@ -15,13 +18,13 @@ class UserService(
         return userRepository.findById(userId)
     }
 
-    fun editUserFcmId(
+    fun patchUser(
         idUser: Long,
         fcm: String,
     ): User? {
         val user = userRepository.findById(idUser)
         user?.let {
-            it.fcmId = fcm
+            user.patch(fcm)
             userRepository.save(user)
         }
         return user
@@ -33,8 +36,8 @@ class UserService(
 
     fun editLocation(
         idUser: Long,
-        day: String,
-        location: String,
+        day: WeekDay,
+        location: List<Point>,
     ): User? {
         val user = userRepository.findById(idUser)
         user?.let {

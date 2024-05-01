@@ -1,11 +1,11 @@
 package com.riza.apipromo.domain.area
 
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.domain.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import jdk.jshell.spi.ExecutionControl.NotImplementedException
 
-class AreaService(
+open class AreaService(
     private val areaRepository: AreaRepository,
     private val pointInclusionStrategies: Map<PointInclusionMethod, PointInclusionAlgorithm>,
 ) {
@@ -15,8 +15,9 @@ class AreaService(
         method: PointInclusionMethod,
     ): Boolean? {
         val area = areaRepository.findById(areaId)
-        val pointInclusionStrategy = pointInclusionStrategies[method]
-            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        val pointInclusionStrategy =
+            pointInclusionStrategies[method]
+                ?: throw NotImplementedException("Selected method is not implemented in the system")
         return area?.checkPointInsideArea(point, pointInclusionStrategy)
     }
 
@@ -26,12 +27,14 @@ class AreaService(
         method: PointInclusionMethod,
     ): List<Boolean>? {
         val area = areaRepository.findById(areaId)
-        val pointInclusionStrategy = pointInclusionStrategies[method]
-            ?: throw NotImplementedException("Selected method is not implemented in the system")
+        val pointInclusionStrategy =
+            pointInclusionStrategies[method]
+                ?: throw NotImplementedException("Selected method is not implemented in the system")
         return area?.checkMultiplePointsInsideArea(points, pointInclusionStrategy)
     }
 
     fun save(area: Area): Area {
+        area.initialize()
         return areaRepository.save(area)
     }
 

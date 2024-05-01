@@ -1,17 +1,15 @@
 package com.riza.apipromo.domain.promo
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.riza.apipromo.domain.PointInclusionAlgorithm
 import com.riza.apipromo.domain.area.Area
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
 import com.riza.apipromo.domain.user.User
-import com.riza.apipromo.feature.promo.models.PromoType
-import java.util.*
+import java.time.LocalDateTime
 
 data class Promo(
     var id: Long? = null,
     var code: String,
-    var startDate: Date,
-    var endDate: Date?,
+    var startDate: LocalDateTime,
+    var endDate: LocalDateTime?,
     var type: PromoType?,
     var value: Int?,
     var service: String?,
@@ -24,10 +22,9 @@ data class Promo(
         allUsers: List<User>,
         areas: List<Area>,
         pointInclusionAlgorithm: PointInclusionAlgorithm,
-        objectMapper: ObjectMapper,
     ) {
         allUsers.forEach { user: User ->
-            val locations = user.calculateLocationsAsPoints(objectMapper)
+            val locations = user.calculateLocationsAsPoints()
             for (area in areas) {
                 if (area.checkMinimumPointsInsideArea(locations, pointInclusionAlgorithm, threshold)) {
                     users.add(user)
@@ -36,4 +33,9 @@ data class Promo(
             }
         }
     }
+}
+
+enum class PromoType {
+    PERCENT,
+    PRICE,
 }

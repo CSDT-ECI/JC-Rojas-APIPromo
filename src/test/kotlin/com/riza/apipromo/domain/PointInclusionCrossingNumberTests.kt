@@ -1,7 +1,8 @@
 package com.riza.apipromo.domain
 
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
+import com.riza.apipromo.domain.geometry.CrossingNumberAlgorithm
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.Polygon
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

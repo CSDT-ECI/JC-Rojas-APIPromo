@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.riza.apipromo.application.adapters.repository.jpa.area.AreaEntity
 import com.riza.apipromo.application.adapters.repository.jpa.user.UserEntity
 import com.riza.apipromo.domain.promo.Promo
-import com.riza.apipromo.feature.promo.models.PromoType
+import com.riza.apipromo.domain.promo.PromoType
 import jakarta.persistence.*
-import java.util.*
+import java.time.LocalDateTime
 
 @Entity(name = "promo")
 data class PromoEntity(
@@ -15,10 +15,10 @@ data class PromoEntity(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var code: String,
-    @Temporal(TemporalType.DATE)
-    var startDate: Date,
-    @Temporal(TemporalType.DATE)
-    var endDate: Date?,
+    @Basic
+    var startDate: LocalDateTime,
+    @Basic
+    var endDate: LocalDateTime?,
     @Enumerated(EnumType.STRING)
     var type: PromoType?,
     var value: Int?,
@@ -27,7 +27,7 @@ data class PromoEntity(
     var threshold: Int,
     @ManyToMany(
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
+        cascade = [CascadeType.MERGE],
     )
     @JoinTable(
         name = "promo_area",
@@ -38,7 +38,7 @@ data class PromoEntity(
     var areas: MutableSet<AreaEntity>,
     @ManyToMany(
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
+        cascade = [CascadeType.MERGE],
     )
     @JoinTable(
         name = "promo_user",

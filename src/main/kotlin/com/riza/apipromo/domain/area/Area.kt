@@ -1,8 +1,8 @@
 package com.riza.apipromo.domain.area
 
-import com.riza.apipromo.core.Point
-import com.riza.apipromo.core.Polygon
-import com.riza.apipromo.domain.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.Point
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.Polygon
 import com.riza.apipromo.domain.promo.Promo
 
 data class Area(
@@ -37,5 +37,9 @@ data class Area(
             if (pointsInside >= minimumPoints) return true
         }
         return false
+    }
+
+    fun initialize() {
+        polygon.closePolygon()
     }
 }

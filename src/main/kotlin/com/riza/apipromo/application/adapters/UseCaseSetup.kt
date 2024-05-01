@@ -1,19 +1,24 @@
 package com.riza.apipromo.application.adapters
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.riza.apipromo.core.PointInclusionMethod
-import com.riza.apipromo.domain.*
 import com.riza.apipromo.domain.area.AreaRepository
 import com.riza.apipromo.domain.area.AreaService
+import com.riza.apipromo.domain.geometry.CrossingNumberAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
+import com.riza.apipromo.domain.geometry.PointInclusionMethod
+import com.riza.apipromo.domain.geometry.WindingNumberAlgorithm
 import com.riza.apipromo.domain.promo.PromoRepository
 import com.riza.apipromo.domain.promo.PromoService
 import com.riza.apipromo.domain.user.UserRepository
 import com.riza.apipromo.domain.user.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Clock
 
 @Configuration
 class UseCaseSetup {
+    @Bean
+    fun clock() = Clock.systemUTC()
+
     @Bean
     fun crossingNumberAlgorithm(): Pair<PointInclusionMethod, PointInclusionAlgorithm> {
         return Pair(PointInclusionMethod.CN, CrossingNumberAlgorithm())
@@ -43,11 +48,7 @@ class UseCaseSetup {
         userRepository: UserRepository,
         areaRepository: AreaRepository,
         pointInclusionStrategies: List<Pair<PointInclusionMethod, PointInclusionAlgorithm>>,
-        objectMapper: ObjectMapper,
     ): PromoService {
-        return PromoService(promoRepository, areaRepository, userRepository, pointInclusionStrategies.toMap(), objectMapper)
+        return PromoService(promoRepository, areaRepository, userRepository, pointInclusionStrategies.toMap())
     }
-
-    @Bean
-    fun getObjectMapper() = ObjectMapper()
 }
