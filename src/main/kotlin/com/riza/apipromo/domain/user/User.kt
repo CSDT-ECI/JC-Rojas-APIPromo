@@ -16,7 +16,7 @@ data class User(
         day: WeekDay,
         locations: List<Point>,
     ) {
-        locations[day.ordinal].let {
+        this.locations[day].let {
             this.locations[day] = locations
         }
     }

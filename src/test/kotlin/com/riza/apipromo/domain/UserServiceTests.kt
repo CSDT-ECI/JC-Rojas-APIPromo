@@ -1,5 +1,6 @@
 package com.riza.apipromo.domain
 
+import com.riza.apipromo.domain.geometry.Point
 import com.riza.apipromo.domain.user.User
 import com.riza.apipromo.domain.user.UserRepository
 import com.riza.apipromo.domain.user.UserService
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
@@ -88,6 +91,28 @@ class UserServiceTests {
     fun editUserFcmIdShouldReturnNullWhenUserDoesNotExist() {
         `when`(userRepository.findById(999)).thenReturn(null)
         val result = userService.patchUser(999, "newFcmId")
+        Assertions.assertNull(result)
+    }
+
+    @ParameterizedTest
+    @EnumSource(WeekDay::class)
+    fun editLocationShouldUpdateUserLocationForEveryDay(day: WeekDay) {
+        val testUser = User(id = 1, name = "Test User", promos = mutableSetOf())
+        val expectedUser = testUser.copy().apply { locations[day] = listOf(Point(1.0, 1.0)) }
+
+        `when`(userRepository.findById(1)).thenReturn(testUser)
+        `when`(userRepository.save(expectedUser)).thenReturn(expectedUser)
+
+        val result = userService.editLocation(1, day, listOf(Point(1.0, 1.0)))
+
+        Assertions.assertEquals(result?.locations!![day], listOf(Point(1.0, 1.0)))
+        verify(userRepository, times(1)).save(any<User>())
+    }
+
+    @Test
+    fun editLocationShouldReturnNullWhenUserDoesNotExist() {
+        `when`(userRepository.findById(999)).thenReturn(null)
+        val result = userService.editLocation(999, WeekDay.MONDAY, listOf(Point(1.0, 1.0)))
         Assertions.assertNull(result)
     }
 }
