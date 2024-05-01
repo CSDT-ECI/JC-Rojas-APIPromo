@@ -4,7 +4,7 @@ data class Polygon(
     val name: String,
     val points: ArrayList<Point>,
 ) {
-    init {
+    fun closePolygon() {
         points.getOrNull(0)?.let { points.add(it) }
     }
 }

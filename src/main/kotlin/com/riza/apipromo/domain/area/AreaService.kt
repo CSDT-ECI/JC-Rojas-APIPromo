@@ -5,7 +5,7 @@ import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
 import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import jdk.jshell.spi.ExecutionControl.NotImplementedException
 
-class AreaService(
+open class AreaService(
     private val areaRepository: AreaRepository,
     private val pointInclusionStrategies: Map<PointInclusionMethod, PointInclusionAlgorithm>,
 ) {
@@ -34,6 +34,7 @@ class AreaService(
     }
 
     fun save(area: Area): Area {
+        area.initialize()
         return areaRepository.save(area)
     }
 

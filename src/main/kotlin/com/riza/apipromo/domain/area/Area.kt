@@ -38,4 +38,8 @@ data class Area(
         }
         return false
     }
+
+    fun initialize() {
+        polygon.closePolygon()
+    }
 }

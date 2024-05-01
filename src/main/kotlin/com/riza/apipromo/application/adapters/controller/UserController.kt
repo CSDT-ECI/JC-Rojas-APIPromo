@@ -1,97 +1,67 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.riza.apipromo.application.adapters.controller.error.BadRequestException
-import com.riza.apipromo.application.adapters.controller.requests.CreateUserRequest
-import com.riza.apipromo.application.adapters.controller.requests.PatchUserRequest
-import com.riza.apipromo.application.adapters.controller.requests.UpdateLocationRequest
-import com.riza.apipromo.application.adapters.controller.responses.BaseResponse
 import com.riza.apipromo.domain.WeekDay
+import com.riza.apipromo.domain.geometry.Point
 import com.riza.apipromo.domain.user.User
 import com.riza.apipromo.domain.user.UserService
+import com.riza.apipromo.v1.UsersApi
+import com.riza.apipromo.v1.domain.CreateUserRequest
+import com.riza.apipromo.v1.domain.PatchUserRequest
+import com.riza.apipromo.v1.domain.UpdateLocationRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(path = ["users"])
 class UserController(
     private val userService: UserService,
-) {
-    @PostMapping
-    @ResponseBody
-    fun createUser(
-        @RequestBody request: CreateUserRequest,
-    ): BaseResponse<User> {
+) : UsersApi {
+    override fun createUser(createUserRequest: CreateUserRequest): ResponseEntity<com.riza.apipromo.v1.domain.User> {
         val user =
             userService.save(
-                User(name = request.name, promos = mutableSetOf()),
+                User(name = createUserRequest.name, promos = mutableSetOf()),
             )
-
-        return BaseResponse(
-            data = user,
-        )
+        return ResponseEntity.ok(user.convertToView())
     }
 
-    @GetMapping
-    @ResponseBody
-    fun getAllUsers(): BaseResponse<Iterable<User>> {
-        val users = userService.findAll()
-        return BaseResponse(
-            data = users,
-        )
+    override fun deleteAllUsers(): ResponseEntity<Unit> {
+        return ResponseEntity.ok(userService.deleteAll())
     }
 
-    @PatchMapping("{userId}")
-    @ResponseBody
-    fun patchUser(
-        @PathVariable("userId") userId: Long,
-        @RequestBody request: PatchUserRequest,
-    ): BaseResponse<User> {
-        val user = userService.patchUser(userId, request.fcm)
-        val response = BaseResponse<User>()
-        if (user != null) {
-            response.data = user
+    override fun editLocationByDayAndUserId(
+        userId: Long,
+        day: com.riza.apipromo.v1.domain.WeekDay,
+        updateLocationRequest: UpdateLocationRequest,
+    ): ResponseEntity<com.riza.apipromo.v1.domain.User> {
+        val user = userService.editLocation(userId, WeekDay.valueOf(day.name), updateLocationRequest.location.map { Point(it.x, it.y) })
+        return if (user != null) {
+            ResponseEntity.ok(user.convertToView())
         } else {
-            throw BadRequestException("User tidak ditemukan")
+            ResponseEntity.notFound().build()
         }
-        return response
     }
 
-    @GetMapping("{userId}")
-    @ResponseBody
-    fun getUserById(
-        @PathVariable("userId") userId: Long,
-    ): BaseResponse<User> {
-        val res = BaseResponse<User>()
+    override fun getAllUsers(): ResponseEntity<List<com.riza.apipromo.v1.domain.User>> {
+        return ResponseEntity.ok(userService.findAll().map { it.convertToView() })
+    }
+
+    override fun getUserById(userId: Long): ResponseEntity<com.riza.apipromo.v1.domain.User> {
         val user = userService.findById(userId)
-        if (user != null) {
-            res.data = user
+        return if (user != null) {
+            ResponseEntity.ok(user.convertToView())
         } else {
-            throw BadRequestException("User tidak ditemukan")
+            ResponseEntity.notFound().build()
         }
-        return res
     }
 
-    @PutMapping("{userId}/locations/{day}")
-    @ResponseBody
-    fun editLocationByDayAndUserId(
-        @PathVariable("userId") userId: Long,
-        @PathVariable("day") day: WeekDay,
-        @RequestBody request: UpdateLocationRequest,
-    ): BaseResponse<User> {
-        val response = BaseResponse<User>()
-        val user = userService.editLocation(userId, day, request.location)
-
-        if (user != null) {
-            response.data = user
+    override fun patchUser(
+        userId: Long,
+        patchUserRequest: PatchUserRequest,
+    ): ResponseEntity<com.riza.apipromo.v1.domain.User> {
+        val user = userService.patchUser(userId, patchUserRequest.fcm)
+        return if (user != null) {
+            ResponseEntity.ok(user.convertToView())
         } else {
-            throw BadRequestException("Hari tidak valid")
+            ResponseEntity.notFound().build()
         }
-        return response
-    }
-
-    @DeleteMapping
-    @ResponseBody
-    fun deleteAllUsers(): BaseResponse<Boolean> {
-        userService.deleteAll()
-        return BaseResponse(data = true)
     }
 }

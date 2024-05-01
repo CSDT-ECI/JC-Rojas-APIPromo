@@ -1,12 +1,12 @@
 package com.riza.apipromo.domain
 
-import com.riza.apipromo.application.adapters.controller.requests.PromoType
 import com.riza.apipromo.domain.area.Area
 import com.riza.apipromo.domain.area.AreaRepository
 import com.riza.apipromo.domain.geometry.*
 import com.riza.apipromo.domain.promo.Promo
 import com.riza.apipromo.domain.promo.PromoRepository
 import com.riza.apipromo.domain.promo.PromoService
+import com.riza.apipromo.domain.promo.PromoType
 import com.riza.apipromo.domain.user.User
 import com.riza.apipromo.domain.user.UserRepository
 import org.junit.jupiter.api.Assertions
@@ -18,6 +18,7 @@ import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDateTime
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
@@ -138,8 +139,8 @@ class PromoServiceTests {
             value = 1,
             type = PromoType.PRICE,
             description = "Test Description 1",
-            startDate = Date.from(Instant.now(clock)),
-            endDate = Date.from(Instant.now(clock).plusSeconds(60)),
+            startDate = LocalDateTime.now(clock),
+            endDate = LocalDateTime.now(clock).plusDays(1),
         )
     }
 

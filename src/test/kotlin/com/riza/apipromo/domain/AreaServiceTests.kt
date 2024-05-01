@@ -53,13 +53,22 @@ class AreaServiceTests {
                 Point(1.0, 4.0),
             )
 
+        val expectedPoints =
+            arrayListOf(
+                Point(1.0, 1.0),
+                Point(4.0, 1.0),
+                Point(4.0, 4.0),
+                Point(1.0, 4.0),
+                Point(1.0, 1.0),
+            )
+
         val polygon = Polygon("test", points)
-        val testArea = Area(polygon = polygon, promos = mutableSetOf())
-        val expectedArea = testArea.copy(id = 1)
+        val requestedArea = Area(polygon = polygon, promos = mutableSetOf())
+        val storedArea = requestedArea.copy(polygon = polygon.copy(points = expectedPoints))
+        val expectedArea = requestedArea.copy(id = 1, polygon = polygon.copy(points = expectedPoints))
 
-        `when`(areaRepository.save(testArea)).thenReturn(expectedArea)
-
-        Assertions.assertEquals(areaService.save(testArea), expectedArea)
+        `when`(areaRepository.save(storedArea)).thenReturn(expectedArea)
+        Assertions.assertEquals(areaService.save(requestedArea), expectedArea)
     }
 
     @Test

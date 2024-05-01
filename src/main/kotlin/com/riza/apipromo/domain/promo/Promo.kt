@@ -1,16 +1,15 @@
 package com.riza.apipromo.domain.promo
 
-import com.riza.apipromo.application.adapters.controller.requests.PromoType
 import com.riza.apipromo.domain.area.Area
 import com.riza.apipromo.domain.geometry.PointInclusionAlgorithm
 import com.riza.apipromo.domain.user.User
-import java.util.*
+import java.time.LocalDateTime
 
 data class Promo(
     var id: Long? = null,
     var code: String,
-    var startDate: Date,
-    var endDate: Date?,
+    var startDate: LocalDateTime,
+    var endDate: LocalDateTime?,
     var type: PromoType?,
     var value: Int?,
     var service: String?,
@@ -34,4 +33,9 @@ data class Promo(
             }
         }
     }
+}
+
+enum class PromoType {
+    PERCENT,
+    PRICE,
 }

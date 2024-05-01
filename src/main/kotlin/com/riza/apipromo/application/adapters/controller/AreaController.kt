@@ -1,97 +1,68 @@
 package com.riza.apipromo.application.adapters.controller
 
-import com.riza.apipromo.application.adapters.controller.error.BadRequestException
-import com.riza.apipromo.application.adapters.controller.requests.AreaRequest
-import com.riza.apipromo.application.adapters.controller.requests.CheckManyPointRequest
-import com.riza.apipromo.application.adapters.controller.requests.CheckPointRequest
-import com.riza.apipromo.application.adapters.controller.responses.BaseResponse
 import com.riza.apipromo.domain.area.Area
 import com.riza.apipromo.domain.area.AreaService
+import com.riza.apipromo.domain.geometry.Point
 import com.riza.apipromo.domain.geometry.PointInclusionMethod
 import com.riza.apipromo.domain.geometry.Polygon
+import com.riza.apipromo.v1.AreasApi
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(path = ["areas"])
-class AreaController(
-    private val areaService: AreaService,
-) {
-    @PostMapping
-    @ResponseBody
-    fun createArea(
-        @RequestBody body: AreaRequest,
-    ): BaseResponse<Area> {
+class AreaController(private val areaService: AreaService) : AreasApi {
+    override fun checkAllPointsInArea(
+        areaId: Long,
+        method: String,
+        checkManyPointRequest: com.riza.apipromo.v1.domain.CheckManyPointRequest,
+    ): ResponseEntity<List<Boolean>> {
+        val pointsInside =
+            areaService.checkAllPointsInArea(
+                areaId,
+                checkManyPointRequest.points.map { Point(it.x, it.y) },
+                PointInclusionMethod.valueOf(method),
+            )
+        return if (pointsInside != null) {
+            ResponseEntity.ok(pointsInside)
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    override fun checkPointInArea(
+        areaId: Long,
+        method: String,
+        checkPointRequest: com.riza.apipromo.v1.domain.CheckPointRequest,
+    ): ResponseEntity<Boolean> {
+        val isInside =
+            areaService.checkPointInArea(
+                areaId,
+                Point(checkPointRequest.point.x, checkPointRequest.point.y),
+                PointInclusionMethod.valueOf(method),
+            )
+        return if (isInside != null) {
+            ResponseEntity.ok(isInside)
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    override fun createArea(areaRequest: com.riza.apipromo.v1.domain.AreaRequest): ResponseEntity<com.riza.apipromo.v1.domain.Area> {
         val area =
             Area(
-                polygon = Polygon(body.name, ArrayList(body.points)),
+                polygon = Polygon(areaRequest.name, ArrayList(areaRequest.points.map { Point(it.x, it.y) })),
                 promos = mutableSetOf(),
             )
 
-        val saved = areaService.save(area)
-
-        return BaseResponse(
-            message = "Berhasil menambah Area",
-            data = saved,
-        )
+        val savedArea = areaService.save(area)
+        return ResponseEntity.ok(savedArea.convertToView())
     }
 
-    @GetMapping
-    @ResponseBody
-    fun getAllAreas(): BaseResponse<Iterable<Area>> {
-        return BaseResponse(
-            message = "semua area",
-            data = areaService.findAll(),
-        )
+    override fun getAllAreas(): ResponseEntity<List<com.riza.apipromo.v1.domain.Area>> {
+        return ResponseEntity.ok(areaService.findAll().map { it.convertToView() })
     }
 
-    @DeleteMapping("{id}")
-    @ResponseBody
-    fun deleteAreaById(
-        @PathVariable("id") id: Long,
-    ): BaseResponse<Area> {
-        areaService.deleteById(id)
-
-        return BaseResponse(
-            "Berhasil menghapus",
-        )
-    }
-
-    @PostMapping("{areaId}/check/{method}")
-    @ResponseBody
-    fun checkPointInArea(
-        @PathVariable("areaId") areaId: Long,
-        @PathVariable("method") method: PointInclusionMethod,
-        @RequestBody body: CheckPointRequest,
-    ): BaseResponse<Boolean> {
-        val result = BaseResponse<Boolean>()
-        val isInside = areaService.checkPointInArea(areaId, body.point, method)
-
-        if (isInside != null) {
-            result.data = isInside
-            result.message = if (isInside) "Point di dalam" else "Point di luar"
-        } else {
-            throw BadRequestException("Area id $areaId Tidak ditemukan")
-        }
-
-        return result
-    }
-
-    @PostMapping("{areaId}/checkall/{method}")
-    @ResponseBody
-    fun checkAllPointsInArea(
-        @PathVariable("areaId") areaId: Long,
-        @PathVariable("method") method: PointInclusionMethod,
-        @RequestBody body: CheckManyPointRequest,
-    ): BaseResponse<List<Boolean>> {
-        val response = BaseResponse<List<Boolean>>()
-
-        val result = areaService.checkAllPointsInArea(areaId, body.points, method)
-        if (result != null) {
-            response.message = "Berhasil menganalisa points"
-            response.data = result
-        } else {
-            throw BadRequestException("Area id $areaId Tidak ditemukan")
-        }
-        return response
+    override fun deleteAreaById(id: Long): ResponseEntity<Unit> {
+        return ResponseEntity.ok(areaService.deleteById(id))
     }
 }

@@ -20,8 +20,9 @@ class PromoService(
         promo: Promo,
         areaIds: List<Long>,
         method: PointInclusionMethod,
-    ): Promo {
+    ): Promo? {
         val areas = areaRepository.findAllById(areaIds)
+        if (areas.isEmpty()) return null
         val users = userRepository.findAll()
         promo.areas = areas.toMutableSet()
         val pointInclusionStrategy =
