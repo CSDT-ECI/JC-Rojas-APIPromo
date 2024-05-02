@@ -4,7 +4,7 @@ description: CSDT - Entregable final, resumen de proceso de gestión de deuda t�
 show_downloads: False
 navigation:
   - title: Home
-    url: /home
+    url: /
   - title: "Etapa 1: Análisis inicial del proyecto"
     url: /resources/Etapa1-estado-inicial
   - title: "Etapa 2: clean code y prácticas XP"
