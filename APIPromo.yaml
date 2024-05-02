@@ -1,470 +1,496 @@
-openapi: "3.0.3"
+openapi: 3.0.3
 info:
-  title: "APIPromo API"
-  description: "APIPromo API"
-  version: "1.0.0"
+  title: APIPromo API
+  description: APIPromo API
+  version: 1.0.0
 servers:
-  - url: "http://localhost:8080"
+  - url: http://localhost:8080
 paths:
   /promos:
     get:
-      summary: "GET promos"
-      operationId: "getAllPromos"
+      summary: GET  all promos
+      operationId: getAllPromos
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Promo"
+                  $ref: '#/components/schemas/Promo'
+      tags:
+        - Promos
     post:
-      summary: "POST promos"
-      operationId: "createPromo"
+      summary: POST create promo
+      operationId: createPromo
+      tags:
+        - Promos
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddPromoRequest"
+              $ref: '#/components/schemas/AddPromoRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Promo"
+                $ref: '#/components/schemas/Promo'
   /areas:
     get:
-      summary: "GET areas"
-      operationId: "getAllAreas"
+      summary: GET All areas
+      operationId: getAllAreas
+      tags:
+        - Areas
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Area"
+                  $ref: '#/components/schemas/Area'
     post:
-      summary: "POST areas"
-      operationId: "createArea"
+      summary: POST create area
+      operationId: createArea
+      tags:
+        - Areas
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AreaRequest"
+              $ref: '#/components/schemas/AreaRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Area"
+                $ref: '#/components/schemas/Area'
   /areas/{areaId}/check/{method}:
     post:
-      summary: "POST areas/{areaId}/check/{method}"
-      operationId: "checkPointInArea"
+      summary: check if point is in given area using methods CN/WN
+      operationId: checkPointInArea
+      tags:
+        - Areas
       parameters:
-        - name: "areaId"
-          in: "path"
+        - name: areaId
+          in: path
           required: true
           schema:
-            type: "integer"
-            format: "int64"
-        - name: "method"
-          in: "path"
+            type: integer
+            format: int64
+        - name: method
+          in: path
           required: true
           schema:
-            type: "string"
+            type: string
             enum:
-              - "CN"
-              - "WN"
+              - CN
+              - WN
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CheckPointRequest"
+              $ref: '#/components/schemas/CheckPointRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                type: "boolean"
-        "404":
-          description: "Requested Area not found"
+                type: boolean
+        '404':
+          description: Requested Area not found
   /areas/{areaId}/checkall/{method}:
     post:
-      summary: "POST areas/{areaId}/checkall/{method}"
-      operationId: "checkAllPointsInArea"
+      summary: check if a set of points is in given area using methods CN/WN
+      operationId: checkAllPointsInArea
+      tags:
+        - Areas
       parameters:
-        - name: "areaId"
-          in: "path"
+        - name: areaId
+          in: path
           required: true
           schema:
-            type: "integer"
-            format: "int64"
-        - name: "method"
-          in: "path"
+            type: integer
+            format: int64
+        - name: method
+          in: path
           required: true
           schema:
-            type: "string"
+            type: string
             enum:
-              - "CN"
-              - "WN"
+              - CN
+              - WN
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CheckManyPointRequest"
+              $ref: '#/components/schemas/CheckManyPointRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  type: "boolean"
-        "404":
-          description: "Requested Area not found"
-  /areas/{id}:
-    delete:
-      summary: "DELETE areas/{id}"
-      operationId: "deleteAreaById"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "202":
-          description: "Area deleted"
-  /users:
-    get:
-      summary: "GET users"
-      operationId: "getAllUsers"
-      responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  type: boolean
+        '404':
+          description: Requested Area not found
+  /areas/{id}:
+    delete:
+      summary: DELETE ALL areas
+      operationId: deleteAreaById
+      tags:
+        - Areas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '202':
+          description: Area deleted
+  /users:
+    get:
+      summary: GET all users
+      operationId: getAllUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
     post:
-      summary: "POST users"
-      operationId: "createUser"
+      summary: POST create user
+      operationId: createUser
+      tags:
+        - Users
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateUserRequest"
+              $ref: '#/components/schemas/CreateUserRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: '#/components/schemas/User'
     delete:
-      summary: "DELETE users"
-      operationId: "deleteAllUsers"
+      summary: DELETE ALL users
+      operationId: deleteAllUsers
+      tags:
+        - Users
       responses:
-        "202":
-          description: "Users Deleted"
+        '202':
+          description: Users Deleted
   /users/{userId}:
     get:
-      summary: "GET users/{userId}"
-      operationId: "getUserById"
+      summary: GET user by ID
+      operationId: getUserById
+      tags:
+        - Users
       parameters:
-        - name: "userId"
-          in: "path"
+        - name: userId
+          in: path
           required: true
           schema:
-            type: "integer"
-            format: "int64"
+            type: integer
+            format: int64
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: "User not found with the given ID"
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found with the given ID
     patch:
-      summary: "PATCH users/{userId}"
-      operationId: "patchUser"
+      summary: PATCH Modify fcmId of User
+      operationId: patchUser
+      tags:
+        - Users
       parameters:
-        - name: "userId"
-          in: "path"
+        - name: userId
+          in: path
           required: true
           schema:
-            type: "integer"
-            format: "int64"
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PatchUserRequest"
+              $ref: '#/components/schemas/PatchUserRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: "User not found with the given ID"
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found with the given ID
   /users/{userId}/locations/{day}:
     put:
-      summary: "PUT users/{userId}/locations/{day}"
-      operationId: "editLocationByDayAndUserId"
+      summary: PUT Update locations of user for a specific day
+      operationId: editLocationByDayAndUserId
+      tags:
+        - Users
       parameters:
-        - name: "userId"
-          in: "path"
+        - name: userId
+          in: path
           required: true
           schema:
-            type: "integer"
-            format: "int64"
-        - name: "day"
-          in: "path"
+            type: integer
+            format: int64
+        - name: day
+          in: path
           required: true
           schema:
-            $ref: "#/components/schemas/WeekDay"
+            $ref: '#/components/schemas/WeekDay'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateLocationRequest"
+              $ref: '#/components/schemas/UpdateLocationRequest'
         required: true
       responses:
-        "200":
-          description: "OK"
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: "User not found with the given ID"
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found with the given ID
 components:
   schemas:
     WeekDay:
-      type: "string"
+      type: string
       enum:
-        - "SUNDAY"
-        - "MONDAY"
-        - "TUESDAY"
-        - "WEDNESDAY"
-        - "THURSDAY"
-        - "FRIDAY"
-        - "SATURDAY"
+        - SUNDAY
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
     Point:
-      type: "object"
+      type: object
       properties:
         x:
-          type: "number"
-          format: "double"
-        "y":
-          type: "number"
-          format: "double"
+          type: number
+          format: double
+        'y':
+          type: number
+          format: double
       required:
-          - "x"
-          - "y"
+        - x
+        - 'y'
     Polygon:
-      type: "object"
+      type: object
       properties:
         name:
-          type: "string"
+          type: string
         points:
           type: array
           items:
-            $ref: "#/components/schemas/Point"
+            $ref: '#/components/schemas/Point'
       required:
-        - "name"
-        - "points"
+        - name
+        - points
     Area:
-      type: "object"
+      type: object
       properties:
         id:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         polygon:
-          $ref: "#/components/schemas/Polygon"
+          $ref: '#/components/schemas/Polygon'
         promos:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Promo"
+            $ref: '#/components/schemas/Promo'
       required:
-        - "polygon"
-        - "promos"
+        - polygon
+        - promos
     User:
-      type: "object"
+      type: object
       properties:
         id:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         name:
-          type: "string"
+          type: string
         fcmId:
-          type: "string"
+          type: string
         locations:
-          type: "object"
+          type: object
           additionalProperties:
-            type: "array"
+            type: array
             items:
-              $ref: "#/components/schemas/Point"
+              $ref: '#/components/schemas/Point'
         promos:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Promo"
+            $ref: '#/components/schemas/Promo'
       required:
-        - "name"
-        - "fcmId"
-        - "locations"
-        - "promos"
+        - name
+        - fcmId
+        - locations
+        - promos
     Promo:
-      type: "object"
+      type: object
       properties:
         id:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         code:
-          type: "string"
+          type: string
         startDate:
-          type: "string"
-          format: "date-time"
+          type: string
+          format: date-time
         endDate:
-          type: "string"
-          format: "date-time"
+          type: string
+          format: date-time
         type:
-          type: "string"
+          type: string
           enum:
-            - "PERCENT"
-            - "PRICE"
+            - PERCENT
+            - PRICE
         value:
-          type: "integer"
-          format: "int32"
+          type: integer
+          format: int32
         service:
-          type: "string"
+          type: string
         description:
-          type: "string"
+          type: string
         threshold:
-          type: "integer"
-          format: "int32"
+          type: integer
+          format: int32
         areas:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Area"
+            $ref: '#/components/schemas/Area'
         users:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/User"
+            $ref: '#/components/schemas/User'
       required:
-        - "code"
-        - "startDate"
-        - "areas"
-        - "users"
-        - "threshold"
+        - code
+        - startDate
+        - areas
+        - users
+        - threshold
     AddPromoRequest:
-      type: "object"
+      type: object
       properties:
         code:
-          type: "string"
+          type: string
         startDate:
-          type: "string"
-          format: "date-time"
+          type: string
+          format: date-time
         endDate:
-          type: "string"
-          format: "date-time"
+          type: string
+          format: date-time
         type:
-          type: "string"
+          type: string
           enum:
-            - "PERCENT"
-            - "PRICE"
+            - PERCENT
+            - PRICE
         value:
-          type: "integer"
-          format: "int32"
+          type: integer
+          format: int32
         service:
-          type: "string"
+          type: string
         description:
-          type: "string"
+          type: string
         areaIds:
-          type: "array"
+          type: array
           items:
-            type: "integer"
-            format: "int64"
+            type: integer
+            format: int64
         threshold:
-          type: "integer"
-          format: "int32"
+          type: integer
+          format: int32
       required:
-        - "code"
-        - "startDate"
-        - "type"
-        - "service"
-        - "description"
-        - "areaIds"
-        - "threshold"
+        - code
+        - startDate
+        - type
+        - service
+        - description
+        - areaIds
+        - threshold
     AreaRequest:
-      type: "object"
+      type: object
       properties:
         name:
-          type: "string"
+          type: string
         points:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Point"
+            $ref: '#/components/schemas/Point'
       required:
-        - "name"
-        - "points"
+        - name
+        - points
     CheckPointRequest:
-      type: "object"
+      type: object
       properties:
         point:
-          $ref: "#/components/schemas/Point"
+          $ref: '#/components/schemas/Point'
       required:
-        - "point"
+        - point
     CheckManyPointRequest:
-      type: "object"
+      type: object
       properties:
         points:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Point"
+            $ref: '#/components/schemas/Point'
       required:
-        - "points"
+        - points
     CreateUserRequest:
-      type: "object"
+      type: object
       properties:
         name:
-          type: "string"
+          type: string
       required:
-        - "name"
+        - name
     PatchUserRequest:
-      type: "object"
+      type: object
       properties:
         fcm:
-          type: "string"
+          type: string
       required:
-        - "fcm"
+        - fcm
     UpdateLocationRequest:
-      type: "object"
+      type: object
       properties:
         location:
-          type: "array"
+          type: array
           items:
-            $ref: "#/components/schemas/Point"
+            $ref: '#/components/schemas/Point'
       required:
-        - "location"
+        - location

@@ -1,9 +1,19 @@
 theme: jekyll-theme-minimal
-title: GitHub pages template
-description: A simple template based on minimal jekyll theme
-show_downloads: True
+title: "CSDT: Proceso de gestión de deuda técnica de API Promo"
+description: CSDT - Entregable final, resumen de proceso de gestión de deuda técnica
+show_downloads: False
 navigation:
   - title: Home
-    url: /
-  - title: Setup
-    url: setup
+    url: /home
+  - title: "Etapa 1: Análisis inicial del proyecto"
+    url: /resources/Etapa1-estado-inicial
+  - title: "Etapa 2: clean code y prácticas XP"
+    url: /resources/Etapa2-clean-code-y-XP
+  - title: "Etapa 3: Deuda técnica de pruebas"
+    url: /resources/Etapa3-testing-debt
+  - title: "Etapa 4: Devex y productividad con IA"
+    url: /resources/Etapa4-Devex-Productividad-IA
+  - title: "Etapa 5: Deuda técnica de procesos: GH actions"
+    url: /resources/Etapa5-GithubActions
+  - title: "Etapa 6: Deuda técnica de arquitectura"
+    url: /resources/Etapa6-Architecture-debt
