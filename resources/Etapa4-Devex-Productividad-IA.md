@@ -101,6 +101,8 @@ al incluir el contexto necesario la herramienta sugirió el siguiente refactor p
 Esta sugerencia reduce la complejidad generada por la clase `UserLocation` y facilita la manipulación del código.
 Otra sugerencia de refactorización que se obtuvo al especificar que se deseaba un cambio de diseño para poder manejar casos más generales
 fue la siguiente: 
+
+
 ![suggestedRedesign.png](img%2Fdevex-ia%2FsuggestedRedesign.png)
 ### Conclusiones
 En general considero que las sugerencias de la herramienta son útiles para guiar al desarrollador en las distintas
